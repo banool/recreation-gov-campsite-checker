@@ -2,9 +2,7 @@
 
 **Thanks to https://github.com/bri-bri/yosemite-camping for getting me most of the way there.**
 
-This should work for any park, not just those in Yosemite like with the original.
-
-You'll want to put this script into a 5 minute crontab. You could also group the output for the success emoji (🏕) and then do something in response, like notify you that there is a campsite available.
+This script scrapes the https://recreation.gov website for campsite availabilities.
 
 ## Example Usage
 ```
@@ -27,6 +25,8 @@ and then use it like this:
 $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --stdin < parks.txt
 ```
 
+You'll want to put this script into a 5 minute crontab. You could also grep the output for the success emoji (🏕) and then do something in response, like notify you that there is a campsite available.
+
 ## Getting park IDs
 What you'll want to do is go to https://recreation.gov/unifSearchResults.do and search for the campground you want. Click on it in the search sidebar. Once it comes up it should take you to a page with `campgroundDetails.do` or `campsiteSearch.do` in the URL.
 
@@ -46,6 +46,7 @@ I wrote this in Python 3.7 but I've tested it as working with 3.5 and 3.6 also.
 ```
 python3 -m venv myvenv
 source myvenv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 # You're good to go!
 ```
@@ -59,4 +60,8 @@ isort camping.py
 
 Feel free to submit pull requests, or look at the original: https://github.com/bri-bri/yosemite-camping
 
-This version is really probably less generally useful, I just tailored it for my use case.
+### Differences from the original
+- Python 3 🐍🐍🐍.
+- Park IDs not hardcoded, passed via the CLI instead.
+- Doesn't give you URLs for campsites with availabilities.
+- Works with any park out of the box, not just those in Yosemite like with the original.

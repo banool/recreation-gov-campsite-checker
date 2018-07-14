@@ -24,6 +24,9 @@ CAMPGROUND_DETAILS = "/campgroundDetails.do"
 
 INPUT_DATE_FORMAT = "%Y-%m-%d"
 
+SUCCESS_EMOJI = "🏕"
+FAILURE_EMOJI = "❌"
+
 
 def format_date(date_object):
     date_formatted = datetime.strftime(date_object, "%a %b %d %Y")
@@ -123,7 +126,7 @@ if __name__ == "__main__":
         resp = send_request(details_payload, search_payload)
         name_of_site = get_name_of_site(resp)
         current, maximum = get_num_available_sites(resp)
-        emoji = "🏕" if current else "❌"
+        emoji = SUCCESS_EMOJI if current else FAILURE_EMOJI
         print(
             "{} {}: {} site(s) available out of {} site(s)".format(
                 emoji, name_of_site, current, maximum
