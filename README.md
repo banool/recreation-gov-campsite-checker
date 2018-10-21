@@ -6,19 +6,19 @@ This script scrapes the https://recreation.gov website for campsite availabiliti
 
 ## Example Usage
 ```
-$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 70926 70928 70925 71532
-❌ TUOLUMNE MEADOWS, CA: 0 site(s) available out of 148 site(s)
-🏕 LOWER PINES, CA: 11 site(s) available out of 73 site(s)
-❌ UPPER PINES, CA: 0 site(s) available out of 235 site(s)
-❌ BASIN MONTANA CAMPGROUND, MT: 0 site(s) available out of 30 site(s)
+$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 232448 232450 232447 232770
+❌ TUOLUMNE MEADOWS: 0 site(s) available out of 148 site(s)
+🏕 LOWER PINES: 11 site(s) available out of 73 site(s)
+❌ UPPER PINES: 0 site(s) available out of 235 site(s)
+❌ BASIN MONTANA CAMPGROUND: 0 site(s) available out of 30 site(s)
 ```
 
 You can also read from stdin. Define a file (e.g. `parks.txt`) with IDs like this:
 ```
-70926
-70928
-70925
-71532
+232447
+232449
+232450
+232448
 ```
 and then use it like this:
 ```
@@ -28,17 +28,7 @@ $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --stdin < park
 You'll want to put this script into a 5 minute crontab. You could also grep the output for the success emoji (🏕) and then do something in response, like notify you that there is a campsite available. See the "Twitter Notification" section below.
 
 ## Getting park IDs
-What you'll want to do is go to https://recreation.gov/unifSearchResults.do and search for the campground you want. Click on it in the search sidebar. Once it comes up it should take you to a page with `campgroundDetails.do` or `campsiteSearch.do` in the URL.
-
-### `campgroundDetails.do`
-You should be able to see the `parkId` in the URL. Example:
-```
-https://www.recreation.gov/camping/tuolumne-meadows/r/campgroundDetails.do?contractCode=NRSO&parkId=70926
-```
-You can see the park ID right at the end there.
-
-### `campsiteSearch.do`
-Open your browser's dev tools and go to the network tab. Refresh the page and look for the POST request to `campsiteSearch.do`. Open the params tab for the request and you'll see the `parkId` there.
+What you'll want to do is go to https://recreation.gov and search for the campground you want. Click on it in the search sidebar. This should take you to a page for that campground, the URL will look like `https://www.recreation.gov/camping/campgrounds/<number>`. That number is the park ID.
 
 ## Installation
 
@@ -65,6 +55,7 @@ Feel free to submit pull requests, or look at the original: https://github.com/b
 - Park IDs not hardcoded, passed via the CLI instead.
 - Doesn't give you URLs for campsites with availabilities.
 - Works with any park out of the box, not just those in Yosemite like with the original.
+- **Update 2018-10-21:** Works with the new recreation.gov site.
 
 ## Twitter Notification
 If you want to be notified about campsite availabilities via Twitter (they're the only API out there that is actually easy to use), you can do this:
