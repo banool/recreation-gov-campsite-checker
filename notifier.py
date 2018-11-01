@@ -46,16 +46,16 @@ if available_site_strings:
         access_token_key=tc["access_token_key"],
         access_token_secret=tc["access_token_secret"],
     )
-    tweet = "@{}, there are campsites available! 🏕🏕🏕\n{}".format(
-        user,
-        "\n".join(available_site_strings),
-    )
+    tweet = "@{}!!! ".format(user)
+    tweet += first_line.rstrip()
+    tweet += " 🏕🏕🏕\n"
+    tweet += "\n".join(available_site_strings)
     tweet += "\n" + "🏕" * random.randint(5, 20)  # To avoid duplicate tweets.
     tweet = tweet[:MAX_TWEET_LENGTH]
     resp = api.PostUpdate(tweet)
     api.CreateFavorite(resp)
     print("The following was tweeted: ")
-    print(first_line)
+    print()
     print(tweet)
     with open(DELAY_FILE, "w") as f:
         f.write(str(int(time.time())))

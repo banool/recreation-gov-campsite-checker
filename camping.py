@@ -105,7 +105,7 @@ if __name__ == "__main__":
     parks = args.parks or [p.strip() for p in sys.stdin]
 
     print(
-        "These sites are available from {} to {}:".format(
+        "There are campsites available from {} to {}!!!".format(
             args.start_date.strftime(INPUT_DATE_FORMAT),
             args.end_date.strftime(INPUT_DATE_FORMAT),
         )
