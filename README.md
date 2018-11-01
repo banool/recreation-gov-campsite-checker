@@ -1,6 +1,6 @@
 # Campsite Availability Scraping
 
-**Thanks to https://github.com/bri-bri/yosemite-camping for getting me most of the way there.**
+**This has been updated to work with the new recreation.gov site and API!!!**
 
 This script scrapes the https://recreation.gov website for campsite availabilities.
 
@@ -70,3 +70,5 @@ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 70926 70928 | py
 You'll want to make the app on another account (like a bot account), not your own, so you get notified when the tweet goes out.
 
 I left my API keys in here but don't exploit them ty thanks.
+
+**Thanks to https://github.com/bri-bri/yosemite-camping for getting me most of the way there for the old version.**
