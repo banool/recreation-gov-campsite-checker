@@ -30,6 +30,8 @@ You'll want to put this script into a 5 minute crontab. You could also grep the 
 ## Getting park IDs
 What you'll want to do is go to https://recreation.gov and search for the campground you want. Click on it in the search sidebar. This should take you to a page for that campground, the URL will look like `https://www.recreation.gov/camping/campgrounds/<number>`. That number is the park ID.
 
+You can also take [this site for a spin](https://pastudan.github.io/national-parks/). Thanks to [pastudan](https://github.com/pastudan)!
+
 ## Installation
 
 I wrote this in Python 3.7 but I've tested it as working with 3.5 and 3.6 also.
