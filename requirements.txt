@@ -10,7 +10,6 @@ future==0.17.1
 idna==2.8
 isort==4.3.4
 oauthlib==3.0.1
-pkg-resources==0.0.0
 python-twitter==3.5
 requests==2.21.0
 requests-oauthlib==1.2.0
