@@ -152,7 +152,7 @@ if __name__ == "__main__":
         '--output',choices=['json', 'text'], default = 'text'
     )
     parser.add_argument(
-        dest="parks",  metavar="park", required=False, nargs="+", help="Park ID(s)", type=int
+        dest="parks",  metavar="park", nargs="+", help="Park ID(s)", type=int
     )
     parser.add_argument(
         "--stdin",
