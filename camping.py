@@ -82,16 +82,13 @@ def valid_date(s):
         raise argparse.ArgumentTypeError(msg)
 
 
-
-
-
 def summarize(results):
     out = []
     availabilities = False
 
     for park_id, status in results.items():
-        name_of_site = status['name_of_site']
-        current, maximum = status['available'], status['maximum']
+        name_of_site = status["name_of_site"]
+        current, maximum = status["available"], status["maximum"]
 
         if current:
             emoji = SUCCESS_EMOJI
@@ -104,7 +101,6 @@ def summarize(results):
                 emoji, name_of_site, current, maximum
             )
         )
-
 
     if availabilities:
         print(
@@ -129,18 +125,22 @@ def get_results(campgrounds):
             park_information, args.start_date, args.end_date
         )
         status = {
-            'name_of_site': name_of_site,
-            'available': current,
-            'maximum':maximum,
+            "name_of_site": name_of_site,
+            "available": current,
+            "maximum": maximum,
         }
         out[park_id] = status
 
     return out
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--start-date", required=True, help="Start date [YYYY-MM-DD]", type=valid_date
+        "--start-date",
+        required=True,
+        help="Start date [YYYY-MM-DD]",
+        type=valid_date,
     )
     parser.add_argument(
         "--end-date",
@@ -148,11 +148,9 @@ if __name__ == "__main__":
         help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
         type=valid_date,
     )
+    parser.add_argument("--output", choices=["json", "text"], default="text")
     parser.add_argument(
-        '--output',choices=['json', 'text'], default = 'text'
-    )
-    parser.add_argument(
-        dest="parks",  metavar="park", nargs="+", help="Park ID(s)", type=int
+        dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
     )
     parser.add_argument(
         "--stdin",
@@ -163,11 +161,11 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    parks =  [p.strip() for p in sys.stdin]
+    parks = [p.strip() for p in sys.stdin]
 
     details = get_results(parks)
-    if args.output == 'text':
+    if args.output == "text":
         summarize(details)
 
-    if args.output == 'json':
+    if args.output == "json":
         print(json.dumps(details, indent=4))
