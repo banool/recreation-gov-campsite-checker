@@ -2,33 +2,38 @@ import random
 import sys
 import time
 
+from hashlib import md5
+
 from camping import SUCCESS_EMOJI
 from twitter_credentials import twitter_credentials as tc
 
 import twitter
 
 MAX_TWEET_LENGTH = 279
-DELAY_FILE = "next.txt"
-DELAY_TIME = 180
+DELAY_FILE_TEMPLATE = "next_{}.txt"
+DELAY_TIME = 1800
 
 # Janky simple argument parsing.
 if len(sys.argv) != 2:
     print("Please provide the user you want to tweet at!")
     sys.exit(1)
 
+user = sys.argv[1].replace("@", "")
+
+first_line = next(sys.stdin)
+first_line_hash = md5(first_line.encode("utf-8")).hexdigest()
+
+delay_file = DELAY_FILE_TEMPLATE.format(first_line_hash)
+
 try:
-    with open(DELAY_FILE, "r") as f:
+    with open(delay_file, "r") as f:
         call_time = int(f.read().rstrip())
 except:
     call_time = 0
 
-if call_time + random.randint(DELAY_TIME-10, DELAY_TIME+10) > int(time.time()):
+if call_time + random.randint(DELAY_TIME-30, DELAY_TIME+30) > int(time.time()):
    print("It is too soon to tweet again") 
    sys.exit(0)
-
-user = sys.argv[1].replace("@", "")
-
-first_line = next(sys.stdin)
 
 available_site_strings = []
 for line in sys.stdin:
@@ -57,7 +62,7 @@ if available_site_strings:
     print("The following was tweeted: ")
     print()
     print(tweet)
-    with open(DELAY_FILE, "w") as f:
+    with open(delay_file, "w") as f:
         f.write(str(int(time.time())))
 else:
     print("No campsites available, not tweeting 😞")

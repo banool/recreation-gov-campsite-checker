@@ -1,2 +1,4 @@
 /myvenv/
 __pycache__
+/next*
+/tweetlog
