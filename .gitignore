@@ -2,3 +2,4 @@
 __pycache__
 /next*
 /tweetlog
+/twitter_credentials.py
