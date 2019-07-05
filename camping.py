@@ -82,31 +82,7 @@ def valid_date(s):
         raise argparse.ArgumentTypeError(msg)
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--start-date", required=True, help="Start date [YYYY-MM-DD]", type=valid_date
-    )
-    parser.add_argument(
-        "--end-date",
-        required=True,
-        help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
-        type=valid_date,
-    )
-    parser.add_argument(
-        dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
-    )
-    parser.add_argument(
-        "--stdin",
-        "-",
-        action="store_true",
-        help="Read list of park ID(s) from stdin instead",
-    )
-
-    args = parser.parse_args()
-
-    parks = args.parks or [p.strip() for p in sys.stdin]
-
+def _main(parks):
     out = []
     availabilities = False
     for park_id in parks:
@@ -138,3 +114,34 @@ if __name__ == "__main__":
     else:
         print("There are no campsites available :(")
     print("\n".join(out))
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--start-date", required=True, help="Start date [YYYY-MM-DD]", type=valid_date
+    )
+    parser.add_argument(
+        "--end-date",
+        required=True,
+        help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
+        type=valid_date,
+    )
+    parser.add_argument(
+        dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
+    )
+    parser.add_argument(
+        "--stdin",
+        "-",
+        action="store_true",
+        help="Read list of park ID(s) from stdin instead",
+    )
+
+    args = parser.parse_args()
+
+    parks = args.parks or [p.strip() for p in sys.stdin]
+
+    try:
+        _main(parks)
+    except Exception:
+        print("Something went wrong")
+        raise
