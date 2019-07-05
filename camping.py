@@ -2,12 +2,21 @@
 
 import argparse
 import json
+import logging
 import sys
 from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
+
+
+LOG = logging.getLogger(__name__)
+formatter = logging.Formatter("%(asctime)s - %(process)s - %(levelname)s - %(message)s")
+sh = logging.StreamHandler()
+sh.setFormatter(formatter)
+LOG.addHandler(sh)
+
 
 BASE_URL = "https://www.recreation.gov"
 AVAILABILITY_ENDPOINT = "/api/camps/availability/campground/"
@@ -71,6 +80,7 @@ def get_num_available_sites(resp, start_date, end_date):
                 break
         if available:
             num_available += 1
+            LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
     return num_available, maximum
 
 
@@ -87,7 +97,13 @@ def _main(parks):
     availabilities = False
     for park_id in parks:
         params = generate_params(args.start_date, args.end_date)
+        LOG.debug("Querying for {} with these params: {}".format(park_id, params))
         park_information = get_park_information(park_id, params)
+        LOG.debug(
+            "Information for {}: {}".format(
+                park_id, json.dumps(park_information, indent=1)
+            )
+        )
         name_of_site = get_name_of_site(park_id)
         current, maximum = get_num_available_sites(
             park_information, args.start_date, args.end_date
@@ -99,8 +115,8 @@ def _main(parks):
             emoji = FAILURE_EMOJI
 
         out.append(
-            "{} {}: {} site(s) available out of {} site(s)".format(
-                emoji, name_of_site, current, maximum
+            "{} {} ({}): {} site(s) available out of {} site(s)".format(
+                emoji, name_of_site, park_id, current, maximum
             )
         )
 
@@ -115,8 +131,10 @@ def _main(parks):
         print("There are no campsites available :(")
     print("\n".join(out))
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--debug", "-d", action="store_true", help="Debug log level")
     parser.add_argument(
         "--start-date", required=True, help="Start date [YYYY-MM-DD]", type=valid_date
     )
@@ -137,6 +155,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+
+    if args.debug:
+        LOG.setLevel(logging.DEBUG)
 
     parks = args.parks or [p.strip() for p in sys.stdin]
 
