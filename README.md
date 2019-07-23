@@ -49,6 +49,7 @@ This code is formatted using black and isort:
 black -l 80 --py36 camping.py
 isort camping.py
 ```
+Note: `black` only really supports 3.6+ so watch out!
 
 Feel free to submit pull requests, or look at the original: https://github.com/bri-bri/yosemite-camping
 
