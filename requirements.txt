@@ -1,6 +1,5 @@
 appdirs==1.4.3
 attrs==18.2.0
-beautifulsoup4==4.7.1
 black==18.9b0
 certifi==2018.11.29
 chardet==3.0.4
