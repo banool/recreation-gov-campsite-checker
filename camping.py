@@ -69,18 +69,25 @@ def get_num_available_sites(resp, start_date, end_date):
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
     dates = set(format_date(i) for i in dates)
+    sites_avail = []
     for site in resp["campsites"].values():
-        available = bool(len(site["availabilities"]))
+        available = False
+        dates_avail = []
         for date, status in site["availabilities"].items():
             if date not in dates:
                 continue
-            if status != "Available":
-                available = False
-                break
+            if status == "Available":
+                d = datetime.strptime(date, '%Y-%m-%dT00:00:00Z')
+                # filter out weekdays if needed:
+                if args.weekend and d.weekday() not in [4, 5]:
+                    continue
+                available = True
+                dates_avail.append(d.strftime("%a, %d %b %Y"))
         if available:
+            sites_avail.append({'site': "site {}: {} {}".format(site['campsite_id'], site['site'], site['campsite_type']), 'dates': dates_avail })
             num_available += 1
             LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
-    return num_available, maximum
+    return num_available, maximum, sites_avail 
 
 
 def valid_date(s):
@@ -104,7 +111,7 @@ def _main(parks):
             )
         )
         name_of_site = get_name_of_site(park_id)
-        current, maximum = get_num_available_sites(
+        current, maximum, dates_avail = get_num_available_sites(
             park_information, args.start_date, args.end_date
         )
         if current:
@@ -114,10 +121,12 @@ def _main(parks):
             emoji = FAILURE_EMOJI
 
         out.append(
-            "{} {} ({}): {} site(s) available out of {} site(s)".format(
-                emoji, name_of_site, park_id, current, maximum
+                "{} {} ({}): {} site(s) available out of {} site(s)".format(
+                    emoji, name_of_site, park_id, current, maximum
             )
         )
+        if current:
+            out.append(json.dumps(dates_avail, sort_keys=True,  indent=4))
 
     if availabilities:
         print(
@@ -133,6 +142,7 @@ def _main(parks):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--weekend", "-w", action="store_true", help="Filter for friday-saturday availability")
     parser.add_argument("--debug", "-d", action="store_true", help="Debug log level")
     parser.add_argument(
         "--start-date", required=True, help="Start date [YYYY-MM-DD]", type=valid_date
