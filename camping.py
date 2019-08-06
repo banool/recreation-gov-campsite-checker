@@ -85,7 +85,7 @@ def get_num_available_sites(resp, start_date, end_date):
         if available:
             sites_avail.append({'site': "site {}: {} {}".format(site['campsite_id'], site['site'], site['campsite_type']), 'dates': dates_avail })
             LOG.debug("Available site {}: {}".format(len(sites_avail), json.dumps(site, indent=1)))
-    return maximum, sites_avail 
+    return maximum, sites_avail
 
 def display_date(d):
     return d.strftime("%a, %d %b %Y")
@@ -146,7 +146,6 @@ def _main(parks):
         )
         if args.weekend:
             dates_avail = weekend_filter(dates_avail)
-            
         current = len(dates_avail)
         if current:
             emoji = SUCCESS_EMOJI
