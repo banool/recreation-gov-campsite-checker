@@ -65,7 +65,6 @@ def get_name_of_site(park_id):
 def get_num_available_sites(resp, start_date, end_date):
     maximum = resp["count"]
 
-    num_available = 0
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
     dates = set(format_date(i) for i in dates)
@@ -78,17 +77,18 @@ def get_num_available_sites(resp, start_date, end_date):
                 continue
             if status == "Available":
                 d = datetime.strptime(date, '%Y-%m-%dT00:00:00Z')
-                # filter out weekdays if needed:
-                if args.weekend and d.weekday() not in [4, 5]:
-                    continue
+                ## filter out weekdays if needed:
+                #if args.weekend and d.weekday() not in [4, 5]:
+                #    continue
                 available = True
-                dates_avail.append(d.strftime("%a, %d %b %Y"))
+                dates_avail.append(d)
         if available:
             sites_avail.append({'site': "site {}: {} {}".format(site['campsite_id'], site['site'], site['campsite_type']), 'dates': dates_avail })
-            num_available += 1
-            LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
-    return num_available, maximum, sites_avail 
+            LOG.debug("Available site {}: {}".format(len(sites_avail), json.dumps(site, indent=1)))
+    return maximum, sites_avail 
 
+def display_date(d):
+    return d.strftime("%a, %d %b %Y")
 
 def valid_date(s):
     try:
@@ -97,6 +97,36 @@ def valid_date(s):
         msg = "Not a valid date: '{0}'.".format(s)
         raise argparse.ArgumentTypeError(msg)
 
+def extract_consecutive_weekends(entry):
+    weekends = []
+    for d in entry["dates"]:
+        LOG.debug("{} is a {}".format(display_date(d), d.weekday()))
+        if d.weekday() == 4: # it's a friday
+            following_saturday = d+timedelta(days=1)
+            if following_saturday in entry['dates']:
+                weekends.append(d)
+                weekends.append(following_saturday)
+    return weekends
+
+def weekend_filter(sites_available):
+    return [
+            {
+                "site": s["site"],
+                "dates": extract_consecutive_weekends(s)
+            }
+            for s in sites_available
+            if extract_consecutive_weekends(s)
+            ]
+
+def print_findings(dates_avail):
+    formatted_dates = [
+            {
+                "site": s["site"],
+                "dates": [display_date(d) for d in s["dates"]]
+            }
+            for s in dates_avail
+            ]
+    return json.dumps(formatted_dates, sort_keys=True,  indent=4)
 
 def _main(parks):
     out = []
@@ -111,9 +141,13 @@ def _main(parks):
             )
         )
         name_of_site = get_name_of_site(park_id)
-        current, maximum, dates_avail = get_num_available_sites(
+        maximum, dates_avail = get_num_available_sites(
             park_information, args.start_date, args.end_date
         )
+        if args.weekend:
+            dates_avail = weekend_filter(dates_avail)
+            
+        current = len(dates_avail)
         if current:
             emoji = SUCCESS_EMOJI
             availabilities = True
@@ -125,8 +159,8 @@ def _main(parks):
                     emoji, name_of_site, park_id, current, maximum
             )
         )
-        if current:
-            out.append(json.dumps(dates_avail, sort_keys=True,  indent=4))
+    if current:
+        out.append(print_findings(dates_avail))
 
     if availabilities:
         print(
