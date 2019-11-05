@@ -79,7 +79,11 @@ def get_num_available_sites(resp, start_date, end_date):
                 break
         if available:
             num_available += 1
-            LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
+            LOG.debug(
+                "Available site {}: {}".format(
+                    num_available, json.dumps(site, indent=1)
+                )
+            )
     return num_available, maximum
 
 
@@ -91,11 +95,11 @@ def valid_date(s):
         raise argparse.ArgumentTypeError(msg)
 
 
-def _main(parks):
+def _main(parks, start_date, end_date, machine=False):
     out = []
     availabilities = False
     for park_id in parks:
-        params = generate_params(args.start_date, args.end_date)
+        params = generate_params(start_date, end_date)
         LOG.debug("Querying for {} with these params: {}".format(park_id, params))
         park_information = get_park_information(park_id, params)
         LOG.debug(
@@ -105,7 +109,7 @@ def _main(parks):
         )
         name_of_site = get_name_of_site(park_id)
         current, maximum = get_num_available_sites(
-            park_information, args.start_date, args.end_date
+            park_information, start_date, end_date
         )
         if current:
             emoji = SUCCESS_EMOJI
@@ -113,22 +117,26 @@ def _main(parks):
         else:
             emoji = FAILURE_EMOJI
 
-        out.append(
-            "{} {} ({}): {} site(s) available out of {} site(s)".format(
-                emoji, name_of_site, park_id, current, maximum
+        if not machine or (machine and current):
+            out.append(
+                "{} {} ({}): {} site(s) available out of {} site(s)".format(
+                    emoji, name_of_site, park_id, current, maximum
+                )
             )
-        )
 
-    if availabilities:
-        print(
-            "There are campsites available from {} to {}!!!".format(
-                args.start_date.strftime(INPUT_DATE_FORMAT),
-                args.end_date.strftime(INPUT_DATE_FORMAT),
+    if not machine:
+        if availabilities:
+            print(
+                "There are campsites available from {} to {}!!!".format(
+                    start_date.strftime(INPUT_DATE_FORMAT),
+                    end_date.strftime(INPUT_DATE_FORMAT),
+                )
             )
-        )
-    else:
-        print("There are no campsites available :(")
-    print("\n".join(out))
+        else:
+            print("There are no campsites available :(")
+
+    if out:
+        print("\n".join(out))
 
 
 if __name__ == "__main__":
@@ -142,6 +150,12 @@ if __name__ == "__main__":
         required=True,
         help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
         type=valid_date,
+    )
+    parser.add_argument(
+        "--machine",
+        "-m",
+        action="store_true",
+        help="Output in a machine readable format, for use with scripts",
     )
     parser.add_argument(
         dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
@@ -161,7 +175,7 @@ if __name__ == "__main__":
     parks = args.parks or [p.strip() for p in sys.stdin]
 
     try:
-        _main(parks)
+        _main(parks, args.start_date, args.end_date, machine=args.machine)
     except Exception:
         print("Something went wrong")
         raise
