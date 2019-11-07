@@ -25,12 +25,7 @@ fi
 # See if there were any hits
 
 if [ -z "$result" ] ; then
-    if [ -e $TERMINAL_NOTIFIER ]; then
-        # No sites available
-        $TERMINAL_NOTIFIER $NOTIF_ARGS \
-            -title "No Sites Available" \
-            -message "No sites are yet available."
-    fi
+    # No sites available
 else
     # We've got a site available
     if [ -e $TERMINAL_NOTIFIER ]; then
