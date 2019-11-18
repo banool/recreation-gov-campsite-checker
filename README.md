@@ -4,6 +4,8 @@
 
 This script scrapes the https://recreation.gov website for campsite availabilities.
 
+**Note:** Please don't abuse this script. Most folks out there don't know how to run scrapers against websites, so you're at an unfair advantage by using this.
+
 ## Example Usage
 ```
 $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 232448 232450 232447 232770
