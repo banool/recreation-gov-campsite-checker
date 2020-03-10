@@ -5,6 +5,7 @@ import json
 import logging
 import sys
 from datetime import datetime, timedelta
+import itertools
 
 import requests
 from fake_useragent import UserAgent
@@ -81,6 +82,13 @@ def get_num_available_sites(resp, start_date, end_date, nights):
             num_available += 1
             LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
     return num_available, maximum
+
+
+def consecutive_nights(available, nights):
+    grouped = [len(list(g)) for k, g in itertools.groupby(available) if k]
+    if not grouped:
+        return False
+    return nights <= max(grouped)
 
 
 def valid_date(s):
