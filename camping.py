@@ -89,9 +89,7 @@ def get_num_available_sites(resp, start_date, end_date, nights):
 
 def consecutive_nights(available, nights):
     grouped = [len(list(g)) for k, g in itertools.groupby(available) if k]
-    if not grouped:
-        return False
-    return nights <= max(grouped)
+    return nights <= max(grouped, default=0)
 
 
 def valid_date(s):
