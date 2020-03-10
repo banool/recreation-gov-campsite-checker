@@ -17,6 +17,7 @@ sh = logging.StreamHandler()
 sh.setFormatter(formatter)
 LOG.addHandler(sh)
 
+WARN_NIGHTS = True
 
 BASE_URL = "https://www.recreation.gov"
 AVAILABILITY_ENDPOINT = "/api/camps/availability/campground/"
@@ -64,6 +65,7 @@ def get_name_of_site(park_id):
 
 
 def get_num_available_sites(resp, start_date, end_date, nights):
+    global WARN_NIGHTS
     maximum = resp["count"]
 
     num_available = 0
@@ -72,6 +74,10 @@ def get_num_available_sites(resp, start_date, end_date, nights):
     dates = set(format_date(i) for i in dates)
     if nights not in range(1, num_days + 1): 
         nights = num_days
+        if WARN_NIGHTS:
+            print('Setting number of nights to {}.'.format(nights))
+            WARN_NIGHTS = False
+
     for site in resp["campsites"].values():
         available = []
         for date, status in site["availabilities"].items():
