@@ -70,15 +70,18 @@ def get_num_available_sites(resp, start_date, end_date, nights):
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
     dates = set(format_date(i) for i in dates)
+    if nights not in range(1, num_days + 1): 
+        nights = num_days
     for site in resp["campsites"].values():
-        available = bool(len(site["availabilities"]))
+        available = []
         for date, status in site["availabilities"].items():
             if date not in dates:
                 continue
-            if status != "Available":
-                available = False
-                break
-        if available:
+            if status == "Available":
+                available.append(True)
+            else:
+                available.append(False)
+        if consecutive_nights(available, nights):
             num_available += 1
             LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
     return num_available, maximum
