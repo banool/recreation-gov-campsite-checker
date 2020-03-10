@@ -144,6 +144,12 @@ if __name__ == "__main__":
         type=valid_date,
     )
     parser.add_argument(
+        "--nights",
+        default=0,
+        help="Number of consecutive nights (default is all nights).",
+        type=int,
+    )
+    parser.add_argument(
         dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
     )
     parser.add_argument(
