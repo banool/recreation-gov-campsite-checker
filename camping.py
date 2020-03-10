@@ -62,7 +62,7 @@ def get_name_of_site(park_id):
     return resp["campground"]["facility_name"]
 
 
-def get_num_available_sites(resp, start_date, end_date):
+def get_num_available_sites(resp, start_date, end_date, nights):
     maximum = resp["count"]
 
     num_available = 0
@@ -105,7 +105,7 @@ def _main(parks):
         )
         name_of_site = get_name_of_site(park_id)
         current, maximum = get_num_available_sites(
-            park_information, args.start_date, args.end_date
+            park_information, args.start_date, args.end_date, args.nights
         )
         if current:
             emoji = SUCCESS_EMOJI
