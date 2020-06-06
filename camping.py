@@ -64,7 +64,7 @@ def get_name_of_site(park_id):
     return resp["campground"]["facility_name"]
 
 
-def get_num_available_sites(resp, start_date, end_date, nights):
+def get_num_available_sites(resp, start_date, end_date, nights=None):
     global WARN_NIGHTS
     maximum = resp["count"]
 
@@ -120,7 +120,7 @@ def _main(parks):
         )
         name_of_site = get_name_of_site(park_id)
         current, maximum = get_num_available_sites(
-            park_information, args.start_date, args.end_date, args.nights
+            park_information, args.start_date, args.end_date, nights=args.nights
         )
         if current:
             emoji = SUCCESS_EMOJI
@@ -160,7 +160,6 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--nights",
-        default=0,
         help="Number of consecutive nights (default is all nights in the given range).",
         type=int,
     )
