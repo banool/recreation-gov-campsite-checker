@@ -100,6 +100,12 @@ def valid_date(s):
         msg = "Not a valid date: '{0}'.".format(s)
         raise argparse.ArgumentTypeError(msg)
 
+def positive_int(i):
+    i = int(i)
+    if i <= 0:
+        msg = "Not a valid number of nights: {0}".format(i)
+        raise argparse.ArgumentTypeError(msg)
+    return i
 
 def _main(parks):
     out = []
@@ -156,7 +162,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--nights",
         help="Number of consecutive nights (default is all nights in the given range).",
-        type=int,
+        type=positive_int,
     )
     parser.add_argument(
         dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
