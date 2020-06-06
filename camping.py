@@ -161,7 +161,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--nights",
         default=0,
-        help="Number of consecutive nights (default is all nights).",
+        help="Number of consecutive nights (default is all nights in the given range).",
         type=int,
     )
     parser.add_argument(
