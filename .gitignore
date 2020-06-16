@@ -3,3 +3,5 @@ __pycache__
 /next*
 /tweetlog
 /twitter_credentials.py
+/twitter_credentials.json
+*.swp

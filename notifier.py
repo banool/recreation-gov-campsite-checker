@@ -1,3 +1,4 @@
+import json
 import random
 import sys
 import time
@@ -5,13 +6,17 @@ import time
 from hashlib import md5
 
 from camping import SUCCESS_EMOJI
-from twitter_credentials import twitter_credentials as tc
 
 import twitter
 
 MAX_TWEET_LENGTH = 279
 DELAY_FILE_TEMPLATE = "next_{}.txt"
 DELAY_TIME = 1800
+CREDENTIALS_FILE = "twitter_credentials.json"
+
+
+with open(CREDENTIALS_FILE) as f:
+    tc = json.load(f)
 
 
 def create_tweet(tweet):
@@ -23,7 +28,7 @@ def create_tweet(tweet):
         access_token_secret=tc["access_token_secret"],
     )
     resp = api.PostUpdate(tweet)
-    api.CreateFavorite(resp)
+    # api.CreateFavorite(resp)
     print("The following was tweeted: ")
     print()
     print(tweet)
