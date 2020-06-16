@@ -5,6 +5,7 @@ import json
 import logging
 import sys
 from datetime import datetime, timedelta
+import itertools
 
 import requests
 from fake_useragent import UserAgent
@@ -15,7 +16,6 @@ formatter = logging.Formatter("%(asctime)s - %(process)s - %(levelname)s - %(mes
 sh = logging.StreamHandler()
 sh.setFormatter(formatter)
 LOG.addHandler(sh)
-
 
 BASE_URL = "https://www.recreation.gov"
 AVAILABILITY_ENDPOINT = "/api/camps/availability/campground/"
@@ -62,25 +62,35 @@ def get_name_of_site(park_id):
     return resp["campground"]["facility_name"]
 
 
-def get_num_available_sites(resp, start_date, end_date):
+def get_num_available_sites(resp, start_date, end_date, nights=None):
     maximum = resp["count"]
 
     num_available = 0
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
     dates = set(format_date(i) for i in dates)
+    if nights not in range(1, num_days + 1): 
+        nights = num_days
+        LOG.debug('Setting number of nights to {}.'.format(nights))
+
     for site in resp["campsites"].values():
-        available = bool(len(site["availabilities"]))
+        available = []
         for date, status in site["availabilities"].items():
             if date not in dates:
                 continue
-            if status != "Available":
-                available = False
-                break
-        if available:
+            if status == "Available":
+                available.append(True)
+            else:
+                available.append(False)
+        if consecutive_nights(available, nights):
             num_available += 1
             LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
     return num_available, maximum
+
+
+def consecutive_nights(available, nights):
+    grouped = [len(list(g)) for k, g in itertools.groupby(available) if k]
+    return nights <= max(grouped, default=0)
 
 
 def valid_date(s):
@@ -90,6 +100,12 @@ def valid_date(s):
         msg = "Not a valid date: '{0}'.".format(s)
         raise argparse.ArgumentTypeError(msg)
 
+def positive_int(i):
+    i = int(i)
+    if i <= 0:
+        msg = "Not a valid number of nights: {0}".format(i)
+        raise argparse.ArgumentTypeError(msg)
+    return i
 
 def _main(parks):
     out = []
@@ -105,7 +121,7 @@ def _main(parks):
         )
         name_of_site = get_name_of_site(park_id)
         current, maximum = get_num_available_sites(
-            park_information, args.start_date, args.end_date
+            park_information, args.start_date, args.end_date, nights=args.nights
         )
         if current:
             emoji = SUCCESS_EMOJI
@@ -143,7 +159,11 @@ if __name__ == "__main__":
         help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
         type=valid_date,
     )
-
+    parser.add_argument(
+        "--nights",
+        help="Number of consecutive nights (default is all nights in the given range).",
+        type=positive_int,
+    )
     parks_group = parser.add_mutually_exclusive_group(required=True)
     parks_group.add_argument(
         "--parks",
