@@ -164,10 +164,16 @@ if __name__ == "__main__":
         help="Number of consecutive nights (default is all nights in the given range).",
         type=positive_int,
     )
-    parser.add_argument(
-        dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
+    parks_group = parser.add_mutually_exclusive_group(required=True)
+    parks_group.add_argument(
+        "--parks",
+        dest="parks",
+        metavar="park",
+        nargs="+",
+        help="Park ID(s)",
+        type=int,
     )
-    parser.add_argument(
+    parks_group.add_argument(
         "--stdin",
         "-",
         action="store_true",

@@ -8,7 +8,7 @@ This script scrapes the https://recreation.gov website for campsite availabiliti
 
 ## Example Usage
 ```
-$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 232448 232450 232447 232770
+$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 232448 232450 232447 232770
 ❌ TUOLUMNE MEADOWS: 0 site(s) available out of 148 site(s)
 🏕 LOWER PINES: 11 site(s) available out of 73 site(s)
 ❌ UPPER PINES: 0 site(s) available out of 235 site(s)
