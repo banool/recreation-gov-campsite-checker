@@ -1,0 +1,1 @@
+parameters = {'length': 3, 'months-out': 2, 'parks': ['232450','232447','232770','234039']}

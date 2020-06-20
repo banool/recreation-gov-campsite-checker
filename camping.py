@@ -4,12 +4,13 @@ import argparse
 import json
 import logging
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import itertools
 
 import requests
 from fake_useragent import UserAgent
-
+from parameters import *
+from dateutil.relativedelta import relativedelta
 
 LOG = logging.getLogger(__name__)
 formatter = logging.Formatter("%(asctime)s - %(process)s - %(levelname)s - %(message)s")
@@ -27,6 +28,12 @@ SUCCESS_EMOJI = "🏕"
 FAILURE_EMOJI = "❌"
 
 headers = {"User-Agent": UserAgent().random}
+
+start = datetime.now().strftime('%Y-%m-%d')
+end = date.today() + relativedelta(months=+ parameters['months-out'])
+
+start_datetime = datetime.strptime(start, '%Y-%m-%d')
+end_datetime = datetime.strptime(str(end),'%Y-%m-%d')
 
 
 def format_date(date_object):
@@ -62,16 +69,15 @@ def get_name_of_site(park_id):
     return resp["campground"]["facility_name"]
 
 
-def get_num_available_sites(resp, start_date, end_date, nights=None):
+def get_num_available_sites(resp, nights=None):
     maximum = resp["count"]
 
     num_available = 0
-    num_days = (end_date - start_date).days
-    dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
-    dates = set(format_date(i) for i in dates)
+    num_days = (end_datetime - start_datetime).days
+    dates = [end_datetime - timedelta(days=i) for i in range(1, num_days + 1)]
+    dates = set(datetime.strftime(i, "%Y-%m-%dT00:00:00Z") for i in dates)
     if nights not in range(1, num_days + 1): 
         nights = num_days
-        LOG.debug('Setting number of nights to {}.'.format(nights))
 
     for site in resp["campsites"].values():
         available = []
@@ -84,7 +90,6 @@ def get_num_available_sites(resp, start_date, end_date, nights=None):
                 available.append(False)
         if consecutive_nights(available, nights):
             num_available += 1
-            LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
     return num_available, maximum
 
 
@@ -107,13 +112,19 @@ def positive_int(i):
         raise argparse.ArgumentTypeError(msg)
     return i
 
-def _main(parks):
+def _main():
     out = []
     availabilities = False
-    for park_id in parks:
-        params = generate_params(args.start_date, args.end_date)
-        LOG.debug("Querying for {} with these params: {}".format(park_id, params))
+    for park_id in parameters['parks']:
+        params = {"start_date": datetime.strftime(start_datetime, "%Y-%m-%dT00:00:00Z"), "end_date": datetime.strftime(end, "%Y-%m-%dT00:00:00Z")}
+
+
         park_information = get_park_information(park_id, params)
+        
+        # out.append("Information for {}: {}".format(
+        #         park_id, json.dumps(park_information, indent=1)
+        #     ))
+
         LOG.debug(
             "Information for {}: {}".format(
                 park_id, json.dumps(park_information, indent=1)
@@ -121,7 +132,7 @@ def _main(parks):
         )
         name_of_site = get_name_of_site(park_id)
         current, maximum = get_num_available_sites(
-            park_information, args.start_date, args.end_date, nights=args.nights
+            park_information, nights=parameters['length']
         )
         if current:
             emoji = SUCCESS_EMOJI
@@ -130,16 +141,16 @@ def _main(parks):
             emoji = FAILURE_EMOJI
 
         out.append(
-            "{} {} ({}): {} site(s) available out of {} site(s)".format(
+            "<br> {} {} ({}): {} site(s) available out of {} site(s)".format(
                 emoji, name_of_site, park_id, current, maximum
             )
         )
 
     if availabilities:
         print(
-            "There are campsites available from {} to {}!!!".format(
-                args.start_date.strftime(INPUT_DATE_FORMAT),
-                args.end_date.strftime(INPUT_DATE_FORMAT),
+            "There are campsites available from {} to {} for {} consecutive nights!!!".format(
+                start_datetime.strftime(INPUT_DATE_FORMAT),
+                end.strftime(INPUT_DATE_FORMAT),parameters['length'],
             )
         )
     else:
@@ -150,45 +161,15 @@ def _main(parks):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", "-d", action="store_true", help="Debug log level")
-    parser.add_argument(
-        "--start-date", required=True, help="Start date [YYYY-MM-DD]", type=valid_date
-    )
-    parser.add_argument(
-        "--end-date",
-        required=True,
-        help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
-        type=valid_date,
-    )
-    parser.add_argument(
-        "--nights",
-        help="Number of consecutive nights (default is all nights in the given range).",
-        type=positive_int,
-    )
-    parks_group = parser.add_mutually_exclusive_group(required=True)
-    parks_group.add_argument(
-        "--parks",
-        dest="parks",
-        metavar="park",
-        nargs="+",
-        help="Park ID(s)",
-        type=int,
-    )
-    parks_group.add_argument(
-        "--stdin",
-        "-",
-        action="store_true",
-        help="Read list of park ID(s) from stdin instead",
-    )
 
     args = parser.parse_args()
 
     if args.debug:
         LOG.setLevel(logging.DEBUG)
 
-    parks = args.parks or [p.strip() for p in sys.stdin]
 
     try:
-        _main(parks)
+        _main()
     except Exception:
         print("Something went wrong")
         raise
