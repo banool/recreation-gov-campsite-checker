@@ -4,8 +4,9 @@ import argparse
 import json
 import logging
 import sys
-from datetime import datetime, timedelta
-import itertools
+from datetime import date, datetime, timedelta
+from dateutil import rrule
+from itertools import count, groupby
 
 import requests
 from fake_useragent import UserAgent
@@ -22,6 +23,7 @@ AVAILABILITY_ENDPOINT = "/api/camps/availability/campground/"
 MAIN_PAGE_ENDPOINT = "/api/camps/campgrounds/"
 
 INPUT_DATE_FORMAT = "%Y-%m-%d"
+ISO_DATE_FORMAT = "%Y-%m-%dT00:00:00Z"
 
 SUCCESS_EMOJI = "🏕"
 FAILURE_EMOJI = "❌"
@@ -30,13 +32,12 @@ headers = {"User-Agent": UserAgent().random}
 
 
 def format_date(date_object):
-    date_formatted = datetime.strftime(date_object, "%Y-%m-%dT00:00:00Z")
+    """
+    This function doesn't manipulate the date itself at all, it just
+    formats the date in the format that the API wants.
+    """
+    date_formatted = datetime.strftime(date_object, ISO_DATE_FORMAT)
     return date_formatted
-
-
-def generate_params(start, end):
-    params = {"start_date": format_date(start), "end_date": format_date(end)}
-    return params
 
 
 def send_request(url, params):
@@ -51,9 +52,59 @@ def send_request(url, params):
     return resp.json()
 
 
-def get_park_information(park_id, params):
-    url = "{}{}{}".format(BASE_URL, AVAILABILITY_ENDPOINT, park_id)
-    return send_request(url, params)
+def get_park_information(park_id, start_date, end_date, campsite_type=None):
+    """
+    This function consumes the user intent, collects the necessary information
+    from the recreation.gov API, and then presents it in a nice format for the
+    rest of the program to work with. If the API changes in the future, this is
+    the only function you should need to change.
+
+    The only API to get availability information is the `month?` query param
+    on the availability endpoint. You must query with the first of the month.
+    This means if `start_date` and `end_date` cross a month bounday, we must
+    hit the endpoint multiple times.
+
+    The output of this function looks like this:
+
+    {"<campsite_id>": [<date>, <date>]}
+
+    Where the values are a list of ISO 8601 date strings representing dates
+    where the campsite is available.
+
+    Notably, the output doesn't tell you which sites are available. The rest of
+    the script doesn't need to know this to determine whether sites are available.
+    """
+
+    # Get each first of the month for months in the range we care about.
+    start_of_month = datetime(start_date.year, start_date.month, 1)
+    months = list(rrule.rrule(rrule.MONTHLY, dtstart=start_of_month, until=end_date))
+
+    # Get data for each month.
+    api_data = []
+    for month_date in months:
+        params = {"start_date": format_date(month_date)}
+        LOG.debug("Querying for {} with these params: {}".format(park_id, params))
+        url = "{}{}{}/month?".format(BASE_URL, AVAILABILITY_ENDPOINT, park_id)
+        resp = send_request(url, params)
+        api_data.append(resp)
+
+    # Collapse the data into the described output format.
+    # Filter by campsite_type if necessary.
+    data = {}
+    for month_data in api_data:
+        for campsite_id, campsite_data in month_data["campsites"].items():
+            available = []
+            for date, availability_value in campsite_data["availabilities"].items():
+                if availability_value != "Available":
+                    continue
+                if campsite_type and campsite_type != campsite_data["campsite_type"]:
+                    continue
+                available.append(date)
+            if available:
+                a = data.setdefault(campsite_id, [])
+                a += available
+
+    return data
 
 
 def get_name_of_site(park_id):
@@ -62,61 +113,52 @@ def get_name_of_site(park_id):
     return resp["campground"]["facility_name"]
 
 
-def get_num_available_sites(resp, start_date, end_date, nights=None):
-    maximum = resp["count"]
+def get_num_available_sites(park_information, start_date, end_date, nights=None):
+    maximum = len(park_information)
 
     num_available = 0
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
     dates = set(format_date(i) for i in dates)
-    if nights not in range(1, num_days + 1): 
+
+    if nights not in range(1, num_days + 1):
         nights = num_days
         LOG.debug('Setting number of nights to {}.'.format(nights))
 
-    for site in resp["campsites"].values():
-        available = []
-        for date, status in site["availabilities"].items():
+    for site, availabilities in park_information.items():
+        # List of dates that are in the desired range for this site.
+        desired_available = []
+        for date in availabilities:
             if date not in dates:
                 continue
-            if status == "Available":
-                available.append(True)
-            else:
-                available.append(False)
-        if consecutive_nights(available, nights):
+            desired_available.append(date)
+        if desired_available and consecutive_nights(desired_available, nights):
             num_available += 1
-            LOG.debug("Available site {}: {}".format(num_available, json.dumps(site, indent=1)))
+            LOG.debug("Available site {}: {}".format(num_available, site))
+
     return num_available, maximum
 
 
 def consecutive_nights(available, nights):
-    grouped = [len(list(g)) for k, g in itertools.groupby(available) if k]
-    return nights <= max(grouped, default=0)
+    """
+    Returns whether there are `nights` worth of consecutive nights.
+    """
+    ordinal_dates = [datetime.strptime(dstr, ISO_DATE_FORMAT).toordinal() for dstr in available]
+    c = count()
+    longest_consecutive = max((list(g) for _, g in groupby(ordinal_dates, lambda x: x-next(c))), key=len)
+    return len(longest_consecutive) >= nights
 
 
-def valid_date(s):
-    try:
-        return datetime.strptime(s, INPUT_DATE_FORMAT)
-    except ValueError:
-        msg = "Not a valid date: '{0}'.".format(s)
-        raise argparse.ArgumentTypeError(msg)
-
-def positive_int(i):
-    i = int(i)
-    if i <= 0:
-        msg = "Not a valid number of nights: {0}".format(i)
-        raise argparse.ArgumentTypeError(msg)
-    return i
-
-def _main(parks):
+def main(parks):
     out = []
     availabilities = False
     for park_id in parks:
-        params = generate_params(args.start_date, args.end_date)
-        LOG.debug("Querying for {} with these params: {}".format(park_id, params))
-        park_information = get_park_information(park_id, params)
+        park_information = get_park_information(
+            park_id, args.start_date, args.end_date, args.campsite_type
+        )
         LOG.debug(
-            "Information for {}: {}".format(
-                park_id, json.dumps(park_information, indent=1)
+            "Information for park {}: {}".format(
+                park_id, json.dumps(park_information, indent=2)
             )
         )
         name_of_site = get_name_of_site(park_id)
@@ -147,6 +189,21 @@ def _main(parks):
     print("\n".join(out))
 
 
+def valid_date(s):
+    try:
+        return datetime.strptime(s, INPUT_DATE_FORMAT)
+    except ValueError:
+        msg = "Not a valid date: '{0}'.".format(s)
+        raise argparse.ArgumentTypeError(msg)
+
+def positive_int(i):
+    i = int(i)
+    if i <= 0:
+        msg = "Not a valid number of nights: {0}".format(i)
+        raise argparse.ArgumentTypeError(msg)
+    return i
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", "-d", action="store_true", help="Debug log level")
@@ -163,6 +220,13 @@ if __name__ == "__main__":
         "--nights",
         help="Number of consecutive nights (default is all nights in the given range).",
         type=positive_int,
+    )
+    parser.add_argument(
+        "--campsite-type",
+        help=(
+            'If you want to filter by a type of campsite. For example '
+            '"STANDARD NONELECTRIC" or TODO'
+        ),
     )
     parks_group = parser.add_mutually_exclusive_group(required=True)
     parks_group.add_argument(
@@ -188,7 +252,8 @@ if __name__ == "__main__":
     parks = args.parks or [p.strip() for p in sys.stdin]
 
     try:
-        _main(parks)
+        main(parks)
     except Exception:
         print("Something went wrong")
+        LOG.exception("Something went wrong")
         raise
