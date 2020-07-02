@@ -23,7 +23,7 @@ AVAILABILITY_ENDPOINT = "/api/camps/availability/campground/"
 MAIN_PAGE_ENDPOINT = "/api/camps/campgrounds/"
 
 INPUT_DATE_FORMAT = "%Y-%m-%d"
-ISO_DATE_FORMAT = "%Y-%m-%dT00:00:00Z"
+ISO_DATE_FORMAT = "%Y-%m-%dT00:00:00.000Z"
 
 SUCCESS_EMOJI = "🏕"
 FAILURE_EMOJI = "❌"
