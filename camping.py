@@ -188,6 +188,7 @@ def main(parks):
     else:
         print("There are no campsites available :(")
     print("\n".join(out))
+    return availabilities
 
 
 def valid_date(s):
@@ -253,7 +254,8 @@ if __name__ == "__main__":
     parks = args.parks or [p.strip() for p in sys.stdin]
 
     try:
-        main(parks)
+        code = 0 if main(parks) else 1
+        sys.exit(code)
     except Exception:
         print("Something went wrong")
         LOG.exception("Something went wrong")

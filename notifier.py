@@ -78,5 +78,7 @@ if available_site_strings:
     create_tweet(tweet)
     with open(delay_file, "w") as f:
         f.write(str(int(time.time())))
+    sys.exit(0)
 else:
     print("No campsites available, not tweeting 😞")
+    sys.exit(1)
