@@ -23,7 +23,8 @@ AVAILABILITY_ENDPOINT = "/api/camps/availability/campground/"
 MAIN_PAGE_ENDPOINT = "/api/camps/campgrounds/"
 
 INPUT_DATE_FORMAT = "%Y-%m-%d"
-ISO_DATE_FORMAT = "%Y-%m-%dT00:00:00Z"
+ISO_DATE_FORMAT_REQUEST = "%Y-%m-%dT00:00:00.000Z"
+ISO_DATE_FORMAT_RESPONSE = "%Y-%m-%dT00:00:00Z"
 
 SUCCESS_EMOJI = "🏕"
 FAILURE_EMOJI = "❌"
@@ -31,12 +32,12 @@ FAILURE_EMOJI = "❌"
 headers = {"User-Agent": UserAgent().random}
 
 
-def format_date(date_object):
+def format_date(date_object, format_string=ISO_DATE_FORMAT_REQUEST):
     """
     This function doesn't manipulate the date itself at all, it just
     formats the date in the format that the API wants.
     """
-    date_formatted = datetime.strftime(date_object, ISO_DATE_FORMAT)
+    date_formatted = datetime.strftime(date_object, format_string)
     return date_formatted
 
 
@@ -119,7 +120,7 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
     num_available = 0
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
-    dates = set(format_date(i) for i in dates)
+    dates = set(format_date(i, format_string=ISO_DATE_FORMAT_RESPONSE) for i in dates)
 
     if nights not in range(1, num_days + 1):
         nights = num_days
@@ -143,7 +144,7 @@ def consecutive_nights(available, nights):
     """
     Returns whether there are `nights` worth of consecutive nights.
     """
-    ordinal_dates = [datetime.strptime(dstr, ISO_DATE_FORMAT).toordinal() for dstr in available]
+    ordinal_dates = [datetime.strptime(dstr, ISO_DATE_FORMAT_RESPONSE).toordinal() for dstr in available]
     c = count()
     longest_consecutive = max((list(g) for _, g in groupby(ordinal_dates, lambda x: x-next(c))), key=len)
     return len(longest_consecutive) >= nights
