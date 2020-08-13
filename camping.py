@@ -6,11 +6,13 @@ import logging
 import sys
 from datetime import datetime, timedelta, date
 import itertools
-
+import time
 import requests
 from fake_useragent import UserAgent
 from parameters import *
 from dateutil.relativedelta import relativedelta
+import calendar
+import boto3
 
 LOG = logging.getLogger(__name__)
 formatter = logging.Formatter("%(asctime)s - %(process)s - %(levelname)s - %(message)s")
@@ -78,7 +80,10 @@ def get_num_available_sites(resp, nights=None):
     dates = set(datetime.strftime(i, "%Y-%m-%dT00:00:00Z") for i in dates)
     if nights not in range(1, num_days + 1): 
         nights = num_days
-
+    dates_available = []
+    # for spots in resp['campsites']:
+    #     print(spots)
+    
     for site in resp["campsites"].values():
         available = []
         for date, status in site["availabilities"].items():
@@ -86,11 +91,14 @@ def get_num_available_sites(resp, nights=None):
                 continue
             if status == "Available":
                 available.append(True)
+                dates_available.append(datetime.strptime(date,'%Y-%m-%dT00:00:00Z').strftime('%m-%d-%Y'))
             else:
                 available.append(False)
         if consecutive_nights(available, nights):
             num_available += 1
-    return num_available, maximum
+    dates_available = list(dict.fromkeys(dates_available))
+    dates_available.sort()
+    return num_available, maximum, dates_available
 
 
 def consecutive_nights(available, nights):
@@ -131,7 +139,7 @@ def _main():
             )
         )
         name_of_site = get_name_of_site(park_id)
-        current, maximum = get_num_available_sites(
+        current, maximum, dates = get_num_available_sites(
             park_information, nights=parameters['length']
         )
         if current:
@@ -141,24 +149,34 @@ def _main():
             emoji = FAILURE_EMOJI
 
         out.append(
-            "<br> {} {} ({}): {} site(s) available out of {} site(s)".format(
+            "<br> {} {} ({}): {} site(s) available out of {} site(s). <br> Dates Available:".format(
                 emoji, name_of_site, park_id, current, maximum
             )
         )
+        for i in dates:
+            i = i + " " + datetime.strptime(i,'%m-%d-%Y').strftime('%A')
+            out.append(
+                "<br> {}".format(
+                    i
+                )
+            )
 
     if availabilities:
         print(
-            "There are campsites available from {} to {} for {} consecutive nights!!!".format(
+            "There are campsites available from {} to {} for {} consecutive nights!".format(
                 start_datetime.strftime(INPUT_DATE_FORMAT),
                 end.strftime(INPUT_DATE_FORMAT),parameters['length'],
-            )
+            ), file=open("index.html", "w")
         )
     else:
-        print("There are no campsites available :(")
-    print("\n".join(out))
+        print("There are no campsites available :(", file=open("index.html", "w"))
+    
+    print("\n".join(out), file=open("index.html", "a"))
 
 
 if __name__ == "__main__":
+    filename = 'index.html'
+    bucket_name = 'ca-campgrounds'
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", "-d", action="store_true", help="Debug log level")
 
@@ -170,6 +188,13 @@ if __name__ == "__main__":
 
     try:
         _main()
+        s3_client = boto3.client('s3')
+        
+        response = s3_client.upload_file(filename,bucket_name,filename, ExtraArgs={'ContentType': "text/html", 'ACL': "public-read"})
+        
     except Exception:
         print("Something went wrong")
         raise
+
+
+
