@@ -1,0 +1,895 @@
+
+<html>
+	<head>
+		<title>Santa Clara County Parks and Recreation Dept. Online Reservations</title>
+		<script language="javascript" src="/assets/jscripts/functions.js"></script>
+		<script src="/assets/jscripts/prototype.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+		<script type="text/javascript">
+
+			  var _gaq = _gaq || [];
+			  _gaq.push(['_setAccount', 'UA-17921525-9']);
+			  _gaq.push(['_trackPageview']);
+			
+			  (function() {
+			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			    ga.src = ('http:' == document.location.protocol ? 'http://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+
+
+
+
+			var flashvars = {};
+				flashvars.galleryURL = "photo_gallery_XML.asp?idno=291";
+			var params = {};
+				params.allowfullscreen = true;
+				params.allowscriptaccess = "always";
+				params.bgcolor = "#FFFFFF";
+                params.wmode = "transparent";
+			swfobject.embedSWF("/assets/flash/simpleviewer.swf", "flashContent", "400", "400", "9.0.124", true, flashvars, params);
+
+
+			function HideShowMovie(ID)
+			{
+				if((aLs(ID).visibility == "visible") || (aLs(ID).visibility == ""))
+				{
+					aLs(ID).visibility = "hidden";
+						if(ID=='movieHost') aLs(ID).innerHTML = '';
+				}
+				else
+				{
+					aLs(ID).visibility = "visible";
+						if(ID=='movieHost') setMovie();
+				}
+
+			}
+			
+			function validate(f){
+				var num_people;
+				
+				if(f.people_count.type == "text" || f.people_count.type == "hidden"){
+					num_people = f.people_count.value;
+				}else{
+					num_people = f.people_count.options[f.people_count.selectedIndex].value;
+				}
+				
+				if(num_people == 0 || isNaN(num_people)){
+					alert("Please indicate the number of people in your party/event");
+					hilite_error("people_count");
+					f.people_count.focus();
+					return;
+				}
+				
+				if(f.ETA.type == "select-one"){
+					
+					
+					if(f.ETA.selectedIndex == 0){
+						alert("Please select your Arrival Time before proceeding");
+						hilite_error("ETA");
+						f.ETA.focus();
+						return;
+					}
+					
+					if(f.ETD.selectedIndex == 0){
+						alert("Please select your Departure Time before proceeding");
+						hilite_error("ETD");
+						f.ETD.focus();
+						return;
+					}
+					
+					if(f.ETA.selectedIndex >= f.ETD.selectedIndex){
+						alert("Please check your Arrival and Departure times!");
+						hilite_error("ETA");
+						hilite_error("ETD");
+						f.ETA.focus();
+						return;
+					}
+				}
+				
+				
+				f.submit();
+			}
+			
+			function must_call(f){
+				if (f.moonbounce.checked == 1 || f.amped_sound.checked == 1){
+					f.reserve_btn.disabled = 1;
+					alert("Please call to reserve: (408) 842-2341");
+					f.reserve_btn.value = "(408) 842-2341";
+				}else{
+					f.reserve_btn.disabled = 0;
+					f.reserve_btn.value = "Reserve This Site";
+				}
+			}
+
+		</script>
+		<LINK href="/assets/Styles/Style.css" type="text/css" rel="stylesheet">
+		
+		<style>
+			div.alert_box_style{
+				position:absolute;
+				z-index: 21;
+				font : normal 18px Trebuchet MS, Arial, Verdana, Sans-Serif;
+				text-decoration: none;
+				padding:0px;
+				color: #3B559C;
+				font-weight:bold;
+				text-align:center;
+				background-color:#FFFFFF;
+				border-style:solid;
+				border-color:#3B559C;
+				width:350px;
+				left:700px;
+				margin:auto;
+			}
+			TD{
+				font-size:16px;
+			}
+			
+		</style>
+	</head>
+	<body style="margin:0px; padding:0px;">
+		<form action="ViewCart_facility.asp" method="post" name="searchForm" id="searchForm">
+		<input type="hidden" name="SiteID" value="291">
+		<input type="hidden" name="ArriveDate" value="12/17/2020">
+		<input type="hidden" name="DepartDate" value="12/20/2020">
+
+    
+
+	<div id="parks_frame_header">
+		<a title="Return to the home page" href="https://www.sccgov.org/sites/parks/">
+			<img alt="Santa Clara County Parks" src="https://www.sccgov.org/Style Library/SCCGOV/Images/TEMPLATE7/Common/sccprk_agency_banner.png" style="border:none;">
+		</a>
+	   	<span style="display:block;float:right;margin-right:40px;">&nbsp;&nbsp;&nbsp;
+		<input type="button" onClick="document.location.href='http://gooutsideandplay.org/index.asp';" value="Go To Start Page" id="btnStartPage"  />
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" onClick="getMyAccount()" value="My Account" id="btnHTML"  />
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<span id="help_phone_span" style="color:white;white-space:nowrap;">Questions, Cancellations or Changes Call: (408) 355-2201</span>
+</span>
+	</div>
+
+	<table cellpadding=1 cellspacing=1 border=0 width=90% align=center>
+		<tr>
+			<td style="vertical-align:text-top;"><br>
+			
+				<div id="flashContent" class="photo_gallery" STYLE="width:400px;height:500px;margin-top:20px;z-index: 10;"><!--  --></div><br>
+			</td>
+			<td style="vertical-align:text-top;">
+				<table cellpadding=1 cellspacing=1 border=0 width=90% align=center>
+					<tr>
+						<td colspan=2 class="pageTitle" style="text-align:center;white-space:nowrap;">
+							<b>Mt Madonna Park</b>&nbsp;&nbsp;<a href="/index.asp?actiontype=camping&park_idno=8"><span style="color:#83CB53;position:relative;left:0px;white-space:nowrap;"><img src="/assets/images/ico_green_back_arrow.gif" width=31 height=25 border=0>&nbsp;Back to Map</span></a><br>
+							<span style="font-size:13px;">
+								7850 Pole Line Rd<br>Watsonville, CA 95076
+								<br>
+								(408) 842-2341
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:10%;font-size:1.2em;text-align:right">Site:&nbsp;</td><td style="vertical-align:text-top;font-size:1.2em;white-space:nowrap;"><span style="color:#003399;">417</span></td>
+					</tr>
+					<tr>
+						<td class="TableElement" colspan=2  style="padding:30px;">
+									
+										<SPAN class="ribbon" style="height:20px; padding:4px;">&nbsp;&nbsp;This site is not available<br>for selected date range&nbsp;&nbsp;</span>
+									
+									
+								
+						</td>
+					</tr>
+					<tr>
+						<td class="TableLabel" style="text-align:right;white-space:nowrap;">
+							
+								Arrive Date:
+							</td>
+						<td class="TableElement" style="font-size:16px;font-weight:bold;">12/17/2020</td>
+					</tr>
+					
+					<tr>
+						<td class="TableLabel" style="text-align:right;white-space:nowrap;">Depart Date:</td>
+						<td class="TableElement" style="font-size:16px;font-weight:bold;">12/20/2020</td>
+					</tr>
+					
+					<tr>
+						<td class="TableLabel" style="text-align:right;white-space:nowrap;">
+							
+								Total&nbsp;-&nbsp;3&nbsp;Nights:
+							</td>
+						<td class="TableElement" style="font-size:16px;font-weight:bold;">$78.00</td>
+					</tr>
+					<tr>
+						<td class="TableLabel" style="color:#003366;text-align:right;white-space:nowrap;">
+							Site&nbsp;Type: 
+						</td>
+						<td class="TableElement" style="color:#003366;font-size:16px;font-weight:bold;">
+							Camping - Tent/Non-Electric  
+							</td>
+					</tr>
+					<tr>
+						<td colspan=2>
+							<table cellpadding=4 cellspacing=0 border=0>
+								    
+    									<tr>
+    										<td style="text-align:right;white-space:nowrap;">
+    											Check In:&nbsp;
+    										</td>
+    										<td>
+    											3:00 PM
+    										</td>
+    										<td style="text-align:right;white-space:nowrap;">
+    											Check Out:&nbsp;
+    										</td>
+    										<td>
+    											1:00 PM
+    										</td>
+    									</tr>
+    									<tr>
+    										<td style="text-align:right;white-space:nowrap;">
+    										   RV Pad Dimensions:&nbsp;
+    										</td>
+    										<td>
+    											0' x 0'
+    										</td>
+    										<td style="text-align:right;white-space:nowrap;">
+    											Surface:&nbsp;
+    										</td>
+    										<td>
+    											Dirt
+    										</td>
+    									</tr>
+    									<tr>
+    										<td style="text-align:right;white-space:nowrap;">
+    											RV Parking:&nbsp;
+    										</td>
+    										<td>
+    											Pull Through
+    										</td>
+    										<td style="text-align:right;white-space:nowrap;vertical-align:text-top;">
+    											Shade
+    										</td>
+    										<td>
+                                                Partial
+    										</td>
+    									</tr>
+                                    
+								
+							</table>
+                        </td>
+					</tr>
+					<tr>
+						<td class="TableElement" colspan=4><b>Description:</b><br>
+						Docent Site <br></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="TableHeader" colspan=2>
+				NOTE: Your reservation is not guaranteed until payment is complete.
+				&nbsp;&nbsp;&nbsp;
+			</td>
+		</tr>
+	</table>
+			
+		</td>
+		</tr>
+	</table>
+	<input type="hidden" name="SiteName" value="417">
+	<input type="hidden" name="CheckInTime" value="3:00 PM">
+	<input type="hidden" name="CheckOutTime" value="1:00 PM">
+	</form>
+
+	<a name="avail"></a>
+	<table width="90%" cellspacing="4" cellpadding="0" border="0" align=center>
+	<tr>
+	    <td>
+			<b>3 Month Availability View for this site as of
+			Monday, June 22, 2020 @ 7:13:27 PM</b>
+		</td>
+		<td align="right">
+			<table cellspacing="0" cellpadding="2" border="0">
+			<tr>
+				<td>
+					<a href="/reservations/SiteDetails.asp?SiteID=291&ArriveDate=12/17/2020&DepartDate=12/20/2020&TheDate=7/1/2020#avail"><img src="/Intranet/Images/Left.gif" width="17" height="17" border="0" align="absmiddle"></a>
+				</td>
+				<td>
+					<a href="/reservations/SiteDetails.asp?SiteID=291&ArriveDate=12/17/2020&DepartDate=12/20/2020&TheDate=9/1/2020#avail"><img src="/Intranet/Images/Right.gif" width="17" height="17" border="0" align="absmiddle"></a>
+				</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+	    <td colspan="2">
+			<table width="100%" cellspacing="2" cellpadding="0" border="0">
+			<tr valign="top">
+			    <td width="30%" align="center">
+	<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr valign="top"><td bgcolor="#000000">
+	<table cellspacing="1" cellpadding="1" border="0" width="100%">
+	<tr height="22">
+		<td colspan="7" height="10" align="center" class="TableHeader">
+			<span class="smallwhite">August&nbsp;2020</span>
+		</td>
+	</tr>
+	<tr height="18">
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>S</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>M</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>T</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>W</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>T</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>F</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>S</b>&nbsp;</td>
+	</tr>
+	<tr>
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			1
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			2
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			3
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			4
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			5
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			6
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			7
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			8
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			9
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			10
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			11
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			12
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			13
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			14
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			15
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			16
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			17
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			18
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			19
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			20
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			21
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			22
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			23
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			24
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			25
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			26
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			27
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			28
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			29
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			30
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			31
+		</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+	</tr>
+	</table>
+	</td></tr></table>
+	</td>
+				<td><img src="/assets/images/shim.gif" alt="" width="10" height="1" border="0"></td>
+			    <td width="30%" align="center">
+	<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr valign="top"><td bgcolor="#000000">
+	<table cellspacing="1" cellpadding="1" border="0" width="100%">
+	<tr height="22">
+		<td colspan="7" height="10" align="center" class="TableHeader">
+			<span class="smallwhite">September&nbsp;2020</span>
+		</td>
+	</tr>
+	<tr height="18">
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>S</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>M</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>T</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>W</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>T</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>F</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>S</b>&nbsp;</td>
+	</tr>
+	<tr>
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			1
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			2
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			3
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			4
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			5
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			6
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			7
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			8
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			9
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			10
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			11
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			12
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			13
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			14
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			15
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			16
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			17
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			18
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			19
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			20
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			21
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			22
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#990066">
+			23
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			24
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			25
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			26
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			27
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			28
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			29
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			30
+		</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		</tr><tr height="18">
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+	</tr>
+	</table>
+	</td></tr></table>
+	</td>
+			    <td><img src="/assets/images/shim.gif" alt="" width="10" height="1" border="0"></td>
+			    <td width="30%" align="center">
+	<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr valign="top"><td bgcolor="#000000">
+	<table cellspacing="1" cellpadding="1" border="0" width="100%">
+	<tr height="22">
+		<td colspan="7" height="10" align="center" class="TableHeader">
+			<span class="smallwhite">October&nbsp;2020</span>
+		</td>
+	</tr>
+	<tr height="18">
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>S</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>M</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>T</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>W</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>T</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>F</b>&nbsp;</td>
+	    <td width="14%" class="cal_weekday_header">&nbsp;<b>S</b>&nbsp;</td>
+	</tr>
+	<tr>
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+				<td class="cal_blank_day" height="18">&nbsp;</td>
+				
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			1
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			2
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			3
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			4
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			5
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			6
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			7
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			8
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			9
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			10
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			11
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			12
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			13
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			14
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			15
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			16
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			17
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			18
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			19
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			20
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			21
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			22
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			23
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			24
+		</td>
+		</tr><tr>
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			25
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			26
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			27
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			28
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			29
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			30
+		</td>
+		
+		<td align="center" height="18" class="small" bgcolor="#cccccc">
+			31
+		</td>
+		</tr><tr height="18">
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+		<td class="cal_blank_day">&nbsp;</td>
+		
+	</tr>
+	</table>
+	</td></tr></table>
+	</td>
+			</tr>
+			</table>
+			
+			<table cellspacing="0" cellpadding="0" border="0">
+			<tr>
+			    <td>
+					<table cellspacing="2" cellpadding="0" border="0">
+					<tr>
+					    <td>
+							<table cellspacing="0" cellpadding="0" border="0">
+							<tr><td bgcolor="#FFFFFF"><img src="/assets/images/shim.gif" alt="" width="10" height="10" border="1"></td></tr>
+							</table>
+						</td>
+					    <td class="small">Available</td>
+					</tr>
+					</table>
+				</td>
+				<td>&nbsp;&nbsp;</td>
+			    <td>
+					<table cellspacing="2" cellpadding="0" border="0">
+					<tr>
+					    <td>
+							<table cellspacing="0" cellpadding="0" border="0">
+							<tr><td bgcolor="#990066"><img src="/assets/images/shim.gif" alt="" width="10" height="10" border="1"></td></tr>
+							</table>
+						</td>
+					    <td class="small">Reserved</td>
+					</tr>
+					</table>
+				</td>
+				<td>&nbsp;&nbsp;</td>
+			    <td>
+					<table cellspacing="2" cellpadding="0" border="0">
+					<tr>
+					    <td>
+							<table cellspacing="0" cellpadding="0" border="0">
+							<tr><td bgcolor="#cccccc"><img src="/assets/images/shim.gif" alt="" width="10" height="10" border="1"></td></tr>
+							</table>
+						</td>
+					    <td class="small">Site is Closed</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+			</table>
+			
+			
+		</td>
+	</tr>
+	</table>
+	
+
+          <div style="width:100%;text-align:center;">
+          	</div><!-- parks_frame_container --> 
+
+          </div>
+
+
+
+<div id="screenback" name="screenback" class="darkenBackground" style="display:none;"></div>
+<div class="container" style="z-index:20;">
+
+	<div id="general_alert_box" name="general_alert_box" class="alert_box_style" style="display:none;">
+		<div class="exit_button" id="MSG_window_top" name="MSG_window_top"><a href="javascript:close_gen_alert()"><img src="/assets/images/btn_green_alert_close.gif" alt="Close Window" width=20 height=20 border="0"></a></div>
+		<img src="/assets/images/icon_alert.gif" width="32" height="32" border="0" alt="">
+			<BR clear=left><div id="message_content" style="margin:12px;">In an effort to provide the best camping experience for all, camping reservations are limited to 2 sites per customer.<br><br>Groups needing more than 2 sites are encouraged to book a group camp site. Groups that book in family sites may be asked to disperse and/or vacate.<br><br>RV campsites may NOT be occupied without an RV.<br>
+			<br>
+			<br>
+			<span style="clear:both;position:relative;border: solid 1px #3B559C;height30px;margin:10px;padding:2px;"><a href="javascript:close_gen_alert()">close</a></span>
+			<br>
+			<br>
+		</div>
+	</div>
+</div>
+	
+	
+		<script>
+			aLs('screenback').display='block';
+			aLs('general_alert_box').display='block';
+		</script>
+	
+	</body>
+</html>
+
