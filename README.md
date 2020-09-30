@@ -29,6 +29,10 @@ $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --stdin < park
 
 You'll want to put this script into a 5 minute crontab. You could also grep the output for the success emoji (🏕) and then do something in response, like notify you that there is a campsite available. See the "Twitter Notification" section below.
 
+## Requirements
+python3
+works on command line
+
 ## Number of nights
 If you're flexible on travel dates, you can search for a specific number of contiguous nights within a wide range of dates. This is useful for campgrounds in high-demand areas (like Yosemite Valley) or during peak season when openings are rare. Simply specify the `--nights` argument. For example, to search for a 5-day reservation in the month of June 2020 at Chisos Basin:
 ```
