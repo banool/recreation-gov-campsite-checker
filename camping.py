@@ -195,13 +195,13 @@ def valid_date(s):
     try:
         return datetime.strptime(s, INPUT_DATE_FORMAT)
     except ValueError:
-        msg = "Not a valid date: '{0}'.".format(s)
+        msg = "Not a valid date,please enter a valid date: '{0}'.".format(s)
         raise argparse.ArgumentTypeError(msg)
 
 def positive_int(i):
     i = int(i)
     if i <= 0:
-        msg = "Not a valid number of nights: {0}".format(i)
+        msg = "This is NOT a valid number of nights: {0}".format(i)
         raise argparse.ArgumentTypeError(msg)
     return i
 
@@ -215,7 +215,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--end-date",
         required=True,
-        help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
+        help="End date [YYYY-MM-DD]. You expect to leave this day,pease do not stay at night.",
         type=valid_date,
     )
     parser.add_argument(
@@ -257,6 +257,6 @@ if __name__ == "__main__":
         code = 0 if main(parks) else 1
         sys.exit(code)
     except Exception:
-        print("Something went wrong")
-        LOG.exception("Something went wrong")
+        print("Something went wrong,please try again")
+        LOG.exception("Something went wrong,please try again")
         raise
