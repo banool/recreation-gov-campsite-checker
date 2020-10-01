@@ -23,8 +23,11 @@ LOG.addHandler(sh)
 client = boto3.client('dynamodb')
 
 response = client.get_item(
-    TableName='campgrounds'
-)
+    TableName='campsiteconfig',
+    Key={'campsite-name': {
+        'S': 'Ruby Horsethief Canyon Permits'}
+    }
+)['Item']
 print (response)
 
 
