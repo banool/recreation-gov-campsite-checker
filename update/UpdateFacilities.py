@@ -26,7 +26,7 @@ for key, value in facility.items():
             'availability-endpoint': {
                 'S': value['availability-endpoint']},
             'main-page-endpoint': {
-                'S': value['main-page-endpoint'sfsafsa]
+                'S': value['main-page-endpoint']
             }
         }
     )
