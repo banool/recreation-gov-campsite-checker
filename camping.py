@@ -4,7 +4,7 @@ import argparse
 import json
 import logging
 import sys
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from dateutil import rrule
 from itertools import count, groupby
 
@@ -95,6 +95,7 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None):
     for month_data in api_data:
         for campsite_id, campsite_data in month_data["campsites"].items():
             available = []
+            a = data.setdefault(campsite_id, [])
             for date, availability_value in campsite_data["availabilities"].items():
                 if availability_value != "Available":
                     continue
@@ -102,7 +103,6 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None):
                     continue
                 available.append(date)
             if available:
-                a = data.setdefault(campsite_id, [])
                 a += available
 
     return data
