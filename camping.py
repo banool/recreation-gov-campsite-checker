@@ -130,7 +130,7 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
 
     if nights not in range(1, num_days + 1):
         nights = num_days
-        LOG.debug('Setting number of nights to {}.'.format(nights))
+        LOG.debug("Setting number of nights to {}.".format(nights))
 
     for site, availabilities in park_information.items():
         # List of dates that are in the desired range for this site.
@@ -152,11 +152,9 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
 
         for r in appropriate_consecutive_ranges:
             start, end = r
-            availabilities_filtered.append({
-                "site": int(site),
-                "start": start,
-                "end": end,
-            })
+            availabilities_filtered.append(
+                {"site": int(site), "start": start, "end": end}
+            )
 
     return num_available, maximum, availabilities_filtered
 
@@ -169,10 +167,15 @@ def consecutive_nights(available, nights):
     If there is one or more entries in this list, there is at least one
     date range for this site that is available.
     """
-    ordinal_dates = [datetime.strptime(dstr, ISO_DATE_FORMAT_RESPONSE).toordinal() for dstr in available]
+    ordinal_dates = [
+        datetime.strptime(dstr, ISO_DATE_FORMAT_RESPONSE).toordinal()
+        for dstr in available
+    ]
     c = count()
 
-    consective_ranges = list(list(g) for _, g in groupby(ordinal_dates, lambda x: x-next(c)))
+    consective_ranges = list(
+        list(g) for _, g in groupby(ordinal_dates, lambda x: x - next(c))
+    )
 
     long_enough_consecutive_ranges = []
     for r in consective_ranges:
@@ -180,8 +183,13 @@ def consecutive_nights(available, nights):
         if len(r) < nights:
             continue
         for start_index in range(0, len(r) - nights):
-            start_nice = format_date(datetime.fromordinal(r[start_index]), format_string=INPUT_DATE_FORMAT)
-            end_nice = format_date(datetime.fromordinal(r[start_index+nights]), format_string=INPUT_DATE_FORMAT)
+            start_nice = format_date(
+                datetime.fromordinal(r[start_index]), format_string=INPUT_DATE_FORMAT
+            )
+            end_nice = format_date(
+                datetime.fromordinal(r[start_index + nights]),
+                format_string=INPUT_DATE_FORMAT,
+            )
             long_enough_consecutive_ranges.append((start_nice, end_nice))
 
     return long_enough_consecutive_ranges
@@ -267,6 +275,7 @@ def valid_date(s):
         msg = "Not a valid date: '{0}'.".format(s)
         raise argparse.ArgumentTypeError(msg)
 
+
 def positive_int(i):
     i = int(i)
     if i <= 0:
@@ -295,7 +304,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--campsite-type",
         help=(
-            'If you want to filter by a type of campsite. For example '
+            "If you want to filter by a type of campsite. For example "
             '"STANDARD NONELECTRIC" or TODO'
         ),
     )
@@ -311,12 +320,7 @@ if __name__ == "__main__":
     )
     parks_group = parser.add_mutually_exclusive_group(required=True)
     parks_group.add_argument(
-        "--parks",
-        dest="parks",
-        metavar="park",
-        nargs="+",
-        help="Park ID(s)",
-        type=int,
+        "--parks", dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
     )
     parks_group.add_argument(
         "--stdin",
