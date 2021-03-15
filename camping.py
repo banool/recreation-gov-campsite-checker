@@ -41,6 +41,11 @@ def format_date(date_object, format_string=ISO_DATE_FORMAT_REQUEST):
     return date_formatted
 
 
+def site_date_to_human_date(date_string):
+    date_object = datetime.strptime(date_string, ISO_DATE_FORMAT_RESPONSE)
+    return format_date(date_object, format_string=INPUT_DATE_FORMAT)
+
+
 def send_request(url, params):
     resp = requests.get(url, params=params, headers=headers)
     if resp.status_code != 200:
@@ -108,13 +113,14 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None):
     return data
 
 
-def get_name_of_site(park_id):
+def get_name_of_park(park_id):
     url = "{}{}{}".format(BASE_URL, MAIN_PAGE_ENDPOINT, park_id)
     resp = send_request(url, {})
     return resp["campground"]["facility_name"]
 
 
 def get_num_available_sites(park_information, start_date, end_date, nights=None):
+    availabilities_filtered = []
     maximum = len(park_information)
 
     num_available = 0
@@ -129,28 +135,59 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
     for site, availabilities in park_information.items():
         # List of dates that are in the desired range for this site.
         desired_available = []
+
         for date in availabilities:
             if date not in dates:
                 continue
             desired_available.append(date)
-        if desired_available and consecutive_nights(desired_available, nights):
+
+        if not desired_available:
+            continue
+
+        appropriate_consecutive_ranges = consecutive_nights(desired_available, nights)
+
+        if appropriate_consecutive_ranges:
             num_available += 1
             LOG.debug("Available site {}: {}".format(num_available, site))
 
-    return num_available, maximum
+        for r in appropriate_consecutive_ranges:
+            start, end = r
+            availabilities_filtered.append({
+                "site": int(site),
+                "start": start,
+                "end": end,
+            })
+
+    return num_available, maximum, availabilities_filtered
 
 
 def consecutive_nights(available, nights):
     """
-    Returns whether there are `nights` worth of consecutive nights.
+    Returns a list of dates from which you can start that have
+    enough consecutive nights.
+
+    If there is one or more entries in this list, there is at least one
+    date range for this site that is available.
     """
     ordinal_dates = [datetime.strptime(dstr, ISO_DATE_FORMAT_RESPONSE).toordinal() for dstr in available]
     c = count()
-    longest_consecutive = max((list(g) for _, g in groupby(ordinal_dates, lambda x: x-next(c))), key=len)
-    return len(longest_consecutive) >= nights
+
+    consective_ranges = list(list(g) for _, g in groupby(ordinal_dates, lambda x: x-next(c)))
+
+    long_enough_consecutive_ranges = []
+    for r in consective_ranges:
+        # Skip ranges that are too short.
+        if len(r) < nights:
+            continue
+        for start_index in range(0, len(r) - nights):
+            start_nice = format_date(datetime.fromordinal(r[start_index]), format_string=INPUT_DATE_FORMAT)
+            end_nice = format_date(datetime.fromordinal(r[start_index+nights]), format_string=INPUT_DATE_FORMAT)
+            long_enough_consecutive_ranges.append((start_nice, end_nice))
+
+    return long_enough_consecutive_ranges
 
 
-def main(parks):
+def output_human_output(parks):
     out = []
     availabilities = False
     for park_id in parks:
@@ -162,8 +199,8 @@ def main(parks):
                 park_id, json.dumps(park_information, indent=2)
             )
         )
-        name_of_site = get_name_of_site(park_id)
-        current, maximum = get_num_available_sites(
+        name_of_park = get_name_of_park(park_id)
+        current, maximum, _ = get_num_available_sites(
             park_information, args.start_date, args.end_date, nights=args.nights
         )
         if current:
@@ -174,7 +211,7 @@ def main(parks):
 
         out.append(
             "{} {} ({}): {} site(s) available out of {} site(s)".format(
-                emoji, name_of_site, park_id, current, maximum
+                emoji, name_of_park, park_id, current, maximum
             )
         )
 
@@ -189,6 +226,38 @@ def main(parks):
         print("There are no campsites available :(")
     print("\n".join(out))
     return availabilities
+
+
+def output_json_output(parks):
+    park_to_availabilities = {}
+    availabilities = False
+    for park_id in parks:
+        park_information = get_park_information(
+            park_id, args.start_date, args.end_date, args.campsite_type
+        )
+        LOG.debug(
+            "Information for park {}: {}".format(
+                park_id, json.dumps(park_information, indent=2)
+            )
+        )
+        name_of_park = get_name_of_park(park_id)
+        current, _, availabilities_filtered = get_num_available_sites(
+            park_information, args.start_date, args.end_date, nights=args.nights
+        )
+        if current:
+            availabilities = True
+            park_to_availabilities[park_id] = availabilities_filtered
+
+    print(json.dumps(park_to_availabilities))
+
+    return availabilities
+
+
+def main(parks, json_output=False):
+    if json_output:
+        return output_json_output(parks)
+    else:
+        return output_human_output(parks)
 
 
 def valid_date(s):
@@ -230,6 +299,16 @@ if __name__ == "__main__":
             '"STANDARD NONELECTRIC" or TODO'
         ),
     )
+    parser.add_argument(
+        "--json-output",
+        action="store_true",
+        help=(
+            "This make the script output JSON instead of human readable "
+            "output. Note, this is incompatible with the twitter notifier. "
+            "This output includes more precise information, such as the exact "
+            "avaiable dates and which sites are available."
+        ),
+    )
     parks_group = parser.add_mutually_exclusive_group(required=True)
     parks_group.add_argument(
         "--parks",
@@ -254,7 +333,7 @@ if __name__ == "__main__":
     parks = args.parks or [p.strip() for p in sys.stdin]
 
     try:
-        code = 0 if main(parks) else 1
+        code = 0 if main(parks, json_output=args.json_output) else 1
         sys.exit(code)
     except Exception:
         print("Something went wrong")
