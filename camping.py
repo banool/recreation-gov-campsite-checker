@@ -195,21 +195,28 @@ def consecutive_nights(available, nights):
     return long_enough_consecutive_ranges
 
 
+def check_park(park_id, start_date, end_date, campsite_type, nights=None):
+    park_information = get_park_information(
+        park_id, start_date, end_date, campsite_type
+    )
+    LOG.debug(
+        "Information for park {}: {}".format(
+            park_id, json.dumps(park_information, indent=2)
+        )
+    )
+    name_of_park = get_name_of_park(park_id)
+    current, maximum, availabilities_filtered = get_num_available_sites(
+        park_information, start_date, end_date, nights=nights
+    )
+    return current, maximum, availabilities_filtered, name_of_park
+
+
 def output_human_output(parks):
     out = []
     availabilities = False
     for park_id in parks:
-        park_information = get_park_information(
-            park_id, args.start_date, args.end_date, args.campsite_type
-        )
-        LOG.debug(
-            "Information for park {}: {}".format(
-                park_id, json.dumps(park_information, indent=2)
-            )
-        )
-        name_of_park = get_name_of_park(park_id)
-        current, maximum, _ = get_num_available_sites(
-            park_information, args.start_date, args.end_date, nights=args.nights
+        current, maximum, _, name_of_park = check_park(
+            park_id, args.start_date, args.end_date, args.campsite_type, nights=args.nights
         )
         if current:
             emoji = SUCCESS_EMOJI
@@ -240,17 +247,8 @@ def output_json_output(parks):
     park_to_availabilities = {}
     availabilities = False
     for park_id in parks:
-        park_information = get_park_information(
-            park_id, args.start_date, args.end_date, args.campsite_type
-        )
-        LOG.debug(
-            "Information for park {}: {}".format(
-                park_id, json.dumps(park_information, indent=2)
-            )
-        )
-        name_of_park = get_name_of_park(park_id)
-        current, _, availabilities_filtered = get_num_available_sites(
-            park_information, args.start_date, args.end_date, nights=args.nights
+        current, _, availabilities_filtered, _ = check_park(
+            park_id, args.start_date, args.end_date, args.campsite_type, nights=args.nights
         )
         if current:
             availabilities = True
