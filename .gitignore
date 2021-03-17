@@ -5,3 +5,4 @@ __pycache__
 /twitter_credentials.py
 /twitter_credentials.json
 *.swp
+*egg-info
