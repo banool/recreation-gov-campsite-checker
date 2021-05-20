@@ -58,7 +58,7 @@ def send_request(url, params):
     return resp.json()
 
 
-def get_park_information(park_id, start_date, end_date, campsite_type=None):
+def get_park_information(park_id, start_date, end_date, campsite_type=None, campsite_field=None, campsite_num=None):
     """
     This function consumes the user intent, collects the necessary information
     from the recreation.gov API, and then presents it in a nice format for the
@@ -97,6 +97,16 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None):
     # Collapse the data into the described output format.
     # Filter by campsite_type if necessary.
     data = {}
+
+    campsite_num = args.campsite_num
+    campsite_type=args.campsite_type
+
+    if campsite_num != None:
+        campsite_type= args.campsite_num
+        campsite_field ="campsite_id"
+    else:
+        campsite_field= "campsite_type"
+
     for month_data in api_data:
         for campsite_id, campsite_data in month_data["campsites"].items():
             available = []
@@ -104,8 +114,10 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None):
             for date, availability_value in campsite_data["availabilities"].items():
                 if availability_value != "Available":
                     continue
-                if campsite_type and campsite_type != campsite_data["campsite_type"]:
-                    continue
+                                                                                     
+                            
+                if campsite_type and campsite_type != campsite_data["{}".format(campsite_field)]:
+                   continue         
                 available.append(date)
             if available:
                 a += available
@@ -125,7 +137,7 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
 
     num_available = 0
     num_days = (end_date - start_date).days
-    dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
+    dates = [end_date - timedelta(days=i) for i in range(0, num_days + 1)]
     dates = set(format_date(i, format_string=ISO_DATE_FORMAT_RESPONSE) for i in dates)
 
     if nights not in range(1, num_days + 1):
@@ -300,9 +312,13 @@ if __name__ == "__main__":
         type=positive_int,
     )
     parser.add_argument(
+        "--campsite-num",
+        help="Optional, search for availability at specific campsite #",
+    )
+    parser.add_argument(
         "--campsite-type",
         help=(
-            "If you want to filter by a type of campsite. For example "
+            "Optional, can specify type of campsite such as:"
             '"STANDARD NONELECTRIC" or TODO'
         ),
     )
