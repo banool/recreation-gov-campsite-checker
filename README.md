@@ -44,6 +44,19 @@ There are campsites available from 2020-06-01 to 2020-06-30!!!
 ## Getting park IDs
 What you'll want to do is go to https://recreation.gov and search for the campground you want. Click on it in the search sidebar. This should take you to a page for that campground, the URL will look like `https://www.recreation.gov/camping/campgrounds/<number>`. That number is the park ID.
 
+## Searching for availability at a specific campsite within a campground
+You can search for availablity at just a single specific campsite using the '--campsite-num' arugment.   This can be useful if you have a favorite campsite you like to use or if you have a reservation at a specific campsite that you want to add days to before or after your existing reservation.  This search only works for one campground/campsite combination at a time.
+```
+$ python camping.py --start-date 2020-06-01 --end-date 2020-06-30 --nights 5 --parks 234038 --campsite-num 6943
+There are campsites available from 2020-06-01 to 2020-06-30!!!
+🏕 CHISOS BASIN (BIG BEND) (234038): 1 site(s) available out of 62 site(s)
+```
+
+
+## Getting campsite IDs
+Go to https://recreation.gov and first search for the campground you want and then select the specific campsite within that campground. The URL for the campsite should look like `https://www.recreation.gov/camping/campsites/<number>`. That number is the campsite ID.
+
+
 You can also take [this site for a spin](https://pastudan.github.io/national-parks/). Thanks to [pastudan](https://github.com/pastudan)!
 
 ## Installation
