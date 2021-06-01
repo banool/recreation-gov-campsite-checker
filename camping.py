@@ -137,7 +137,7 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
 
     num_available = 0
     num_days = (end_date - start_date).days
-    dates = [end_date - timedelta(days=i) for i in range(0, num_days + 1)]
+    dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
     dates = set(format_date(i, format_string=ISO_DATE_FORMAT_RESPONSE) for i in dates)
 
     if nights not in range(1, num_days + 1):
@@ -194,12 +194,12 @@ def consecutive_nights(available, nights):
         # Skip ranges that are too short.
         if len(r) < nights:
             continue
-        for start_index in range(0, len(r) - nights):
+        for start_index in range(0, len(r) - nights + 1):
             start_nice = format_date(
                 datetime.fromordinal(r[start_index]), format_string=INPUT_DATE_FORMAT
             )
             end_nice = format_date(
-                datetime.fromordinal(r[start_index + nights]),
+                datetime.fromordinal(r[start_index + nights - 1] + 1),
                 format_string=INPUT_DATE_FORMAT,
             )
             long_enough_consecutive_ranges.append((start_nice, end_nice))
