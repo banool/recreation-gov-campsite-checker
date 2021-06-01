@@ -58,7 +58,7 @@ def send_request(url, params):
     return resp.json()
 
 
-def get_park_information(park_id, start_date, end_date, campsite_type=None):
+def get_park_information(park_id, start_date, end_date, campsite_type=None, campsite_field=None, campsite_num=None):
     """
     This function consumes the user intent, collects the necessary information
     from the recreation.gov API, and then presents it in a nice format for the
@@ -97,6 +97,16 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None):
     # Collapse the data into the described output format.
     # Filter by campsite_type if necessary.
     data = {}
+
+    campsite_num = args.campsite_num
+    campsite_type=args.campsite_type
+
+    if campsite_num != None:
+        campsite_type= args.campsite_num
+        campsite_field ="campsite_id"
+    else:
+        campsite_field= "campsite_type"
+
     for month_data in api_data:
         for campsite_id, campsite_data in month_data["campsites"].items():
             available = []
@@ -104,8 +114,10 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None):
             for date, availability_value in campsite_data["availabilities"].items():
                 if availability_value != "Available":
                     continue
-                if campsite_type and campsite_type != campsite_data["campsite_type"]:
-                    continue
+                                                                                     
+                            
+                if campsite_type and campsite_type != campsite_data["{}".format(campsite_field)]:
+                   continue         
                 available.append(date)
             if available:
                 a += available
@@ -182,12 +194,12 @@ def consecutive_nights(available, nights):
         # Skip ranges that are too short.
         if len(r) < nights:
             continue
-        for start_index in range(0, len(r) - nights):
+        for start_index in range(0, len(r) - nights + 1):
             start_nice = format_date(
                 datetime.fromordinal(r[start_index]), format_string=INPUT_DATE_FORMAT
             )
             end_nice = format_date(
-                datetime.fromordinal(r[start_index + nights]),
+                datetime.fromordinal(r[start_index + nights - 1] + 1),
                 format_string=INPUT_DATE_FORMAT,
             )
             long_enough_consecutive_ranges.append((start_nice, end_nice))
@@ -300,9 +312,13 @@ if __name__ == "__main__":
         type=positive_int,
     )
     parser.add_argument(
+        "--campsite-num",
+        help="Optional, search for availability at specific campsite #",
+    )
+    parser.add_argument(
         "--campsite-type",
         help=(
-            "If you want to filter by a type of campsite. For example "
+            "Optional, can specify type of campsite such as:"
             '"STANDARD NONELECTRIC" or TODO'
         ),
     )
