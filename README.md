@@ -25,6 +25,7 @@ You can also read from stdin. Define a file (e.g. `parks.txt`) with IDs like thi
 and then use it like this:
 ```
 $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --stdin < parks.txt
+PS > Get-Content parks.txt | python camping.py --start-date 2021-09-24 --end-date 2022-09-24 --stdin
 ```
 
 You'll want to put this script into a 5 minute crontab. You could also grep the output for the success emoji (🏕) and then do something in response, like notify you that there is a campsite available. See the "Twitter Notification" section below.
@@ -73,11 +74,11 @@ Feel free to submit pull requests, or look at the original: https://github.com/b
 ## Twitter Notification
 If you want to be notified about campsite availabilities via Twitter (they're the only API out there that is actually easy to use), you can do this:
 1. Make an app via Twitter. It's pretty easy, go to: https://apps.twitter.com/app/new.
-2. Change the values in `twitter_credentials.py` to match your key values.
+2. Change the values in `twitter_credentials.json` to match your key values.
 3. Pipe the output of your command into `notifier.py`. See below for an example.
 
 ```
-python camping.py --start-date 2018-07-20 --end-date 2018-07-23 70926 70928 | python notifier.py @banool1
+python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 70926 70928 | python notifier.py @banool1
 ```
 
 You'll want to make the app on another account (like a bot account), not your own, so you get notified when the tweet goes out.
