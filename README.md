@@ -25,6 +25,9 @@ You can also read from stdin. Define a file (e.g. `parks.txt`) with IDs like thi
 and then use it like this:
 ```
 $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --stdin < parks.txt
+```
+For powershell, try this:
+```
 PS > Get-Content parks.txt | python camping.py --start-date 2021-09-24 --end-date 2022-09-24 --stdin
 ```
 
