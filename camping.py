@@ -29,7 +29,7 @@ ISO_DATE_FORMAT_RESPONSE = "%Y-%m-%dT00:00:00Z"
 SUCCESS_EMOJI = "🏕"
 FAILURE_EMOJI = "❌"
 
-headers = {"User-Agent": UserAgent().random}
+headers = {"User-Agent": UserAgent(verify_ssl=False).random}
 
 
 def format_date(date_object, format_string=ISO_DATE_FORMAT_REQUEST):
