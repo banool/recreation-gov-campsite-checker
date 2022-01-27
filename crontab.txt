@@ -1,0 +1,1 @@
+*/5 * * * * cd ~/Documents/rec_check && ./campshell1.sh >> ~/Documents/rec_check/joblog1.log 2>&1
