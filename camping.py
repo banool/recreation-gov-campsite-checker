@@ -1,65 +1,33 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python3
 
-import argparse
 import json
 import logging
 import sys
+from collections import defaultdict
 from datetime import datetime, timedelta
-from dateutil import rrule
 from itertools import count, groupby
 
-import requests
-from fake_useragent import UserAgent
+from dateutil import rrule
 
+from clients.recreation_client import RecreationClient
+from enums.date_format import DateFormat
+from enums.emoji import Emoji
+from utils import formatter
+from utils.camping_argparser import CampingArgParser
 
 LOG = logging.getLogger(__name__)
-formatter = logging.Formatter("%(asctime)s - %(process)s - %(levelname)s - %(message)s")
+log_formatter = logging.Formatter(
+    "%(asctime)s - %(process)s - %(levelname)s - %(message)s"
+)
 sh = logging.StreamHandler()
-sh.setFormatter(formatter)
+sh.setFormatter(log_formatter)
 LOG.addHandler(sh)
 
-BASE_URL = "https://www.recreation.gov"
-AVAILABILITY_ENDPOINT = "/api/camps/availability/campground/"
-MAIN_PAGE_ENDPOINT = "/api/camps/campgrounds/"
 
-INPUT_DATE_FORMAT = "%Y-%m-%d"
-ISO_DATE_FORMAT_REQUEST = "%Y-%m-%dT00:00:00.000Z"
-ISO_DATE_FORMAT_RESPONSE = "%Y-%m-%dT00:00:00Z"
-
-SUCCESS_EMOJI = "🏕"
-FAILURE_EMOJI = "❌"
-
-headers = {"User-Agent": UserAgent(verify_ssl=False).random}
-
-
-def format_date(date_object, format_string=ISO_DATE_FORMAT_REQUEST):
-    """
-    This function doesn't manipulate the date itself at all, it just
-    formats the date in the format that the API wants.
-    """
-    date_formatted = datetime.strftime(date_object, format_string)
-    return date_formatted
-
-
-def site_date_to_human_date(date_string):
-    date_object = datetime.strptime(date_string, ISO_DATE_FORMAT_RESPONSE)
-    return format_date(date_object, format_string=INPUT_DATE_FORMAT)
-
-
-def send_request(url, params):
-    resp = requests.get(url, params=params, headers=headers)
-    if resp.status_code != 200:
-        raise RuntimeError(
-            "failedRequest",
-            "ERROR, {} code received from {}: {}".format(
-                resp.status_code, url, resp.text
-            ),
-        )
-    return resp.json()
-
-
-def get_park_information(park_id, start_date, end_date, campsite_type=None, campsite_field=None, campsite_num=None):
+def get_park_information(
+    park_id, start_date, end_date, campsite_type=None, campsite_ids=()
+):
     """
     This function consumes the user intent, collects the necessary information
     from the recreation.gov API, and then presents it in a nice format for the
@@ -84,41 +52,41 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None, camp
 
     # Get each first of the month for months in the range we care about.
     start_of_month = datetime(start_date.year, start_date.month, 1)
-    months = list(rrule.rrule(rrule.MONTHLY, dtstart=start_of_month, until=end_date))
+    months = list(
+        rrule.rrule(rrule.MONTHLY, dtstart=start_of_month, until=end_date)
+    )
 
     # Get data for each month.
     api_data = []
     for month_date in months:
-        params = {"start_date": format_date(month_date)}
-        LOG.debug("Querying for {} with these params: {}".format(park_id, params))
-        url = "{}{}{}/month?".format(BASE_URL, AVAILABILITY_ENDPOINT, park_id)
-        resp = send_request(url, params)
-        api_data.append(resp)
+        api_data.append(RecreationClient.get_availability(park_id, month_date))
 
     # Collapse the data into the described output format.
     # Filter by campsite_type if necessary.
     data = {}
 
-    campsite_num = args.campsite_num
-    campsite_type=args.campsite_type
-
-    if campsite_num != None:
-        campsite_type= args.campsite_num
-        campsite_field ="campsite_id"
-    else:
-        campsite_field= "campsite_type"
-
     for month_data in api_data:
         for campsite_id, campsite_data in month_data["campsites"].items():
             available = []
             a = data.setdefault(campsite_id, [])
-            for date, availability_value in campsite_data["availabilities"].items():
+            for date, availability_value in campsite_data[
+                "availabilities"
+            ].items():
                 if availability_value != "Available":
                     continue
-                                                                                     
-                            
-                if campsite_type and campsite_type != campsite_data["{}".format(campsite_field)]:
-                   continue         
+
+                if (
+                    campsite_type
+                    and campsite_type != campsite_data["campsite_type"]
+                ):
+                    continue
+
+                if (
+                    len(campsite_ids) > 0
+                    and int(campsite_data["campsite_id"]) not in campsite_ids
+                ):
+                    continue
+
                 available.append(date)
             if available:
                 a += available
@@ -126,25 +94,26 @@ def get_park_information(park_id, start_date, end_date, campsite_type=None, camp
     return data
 
 
-def get_name_of_park(park_id):
-    url = "{}{}{}".format(BASE_URL, MAIN_PAGE_ENDPOINT, park_id)
-    resp = send_request(url, {})
-    return resp["campground"]["facility_name"]
-
-
-def get_num_available_sites(park_information, start_date, end_date, nights=None):
-    availabilities_filtered = []
+def get_num_available_sites(
+    park_information, start_date, end_date, nights=None
+):
     maximum = len(park_information)
 
     num_available = 0
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
-    dates = set(format_date(i, format_string=ISO_DATE_FORMAT_RESPONSE) for i in dates)
+    dates = set(
+        formatter.format_date(
+            i, format_string=DateFormat.ISO_DATE_FORMAT_RESPONSE.value
+        )
+        for i in dates
+    )
 
     if nights not in range(1, num_days + 1):
         nights = num_days
         LOG.debug("Setting number of nights to {}.".format(nights))
 
+    available_dates_by_campsite_id = defaultdict(list)
     for site, availabilities in park_information.items():
         # List of dates that are in the desired range for this site.
         desired_available = []
@@ -157,7 +126,9 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
         if not desired_available:
             continue
 
-        appropriate_consecutive_ranges = consecutive_nights(desired_available, nights)
+        appropriate_consecutive_ranges = consecutive_nights(
+            desired_available, nights
+        )
 
         if appropriate_consecutive_ranges:
             num_available += 1
@@ -165,11 +136,11 @@ def get_num_available_sites(park_information, start_date, end_date, nights=None)
 
         for r in appropriate_consecutive_ranges:
             start, end = r
-            availabilities_filtered.append(
-                {"site": int(site), "start": start, "end": end}
+            available_dates_by_campsite_id[int(site)].append(
+                {"start": start, "end": end}
             )
 
-    return num_available, maximum, availabilities_filtered
+    return num_available, maximum, available_dates_by_campsite_id
 
 
 def consecutive_nights(available, nights):
@@ -181,7 +152,9 @@ def consecutive_nights(available, nights):
     date range for this site that is available.
     """
     ordinal_dates = [
-        datetime.strptime(dstr, ISO_DATE_FORMAT_RESPONSE).toordinal()
+        datetime.strptime(
+            dstr, DateFormat.ISO_DATE_FORMAT_RESPONSE.value
+        ).toordinal()
         for dstr in available
     ]
     c = count()
@@ -196,76 +169,109 @@ def consecutive_nights(available, nights):
         if len(r) < nights:
             continue
         for start_index in range(0, len(r) - nights + 1):
-            start_nice = format_date(
-                datetime.fromordinal(r[start_index]), format_string=INPUT_DATE_FORMAT
+            start_nice = formatter.format_date(
+                datetime.fromordinal(r[start_index]),
+                format_string=DateFormat.INPUT_DATE_FORMAT.value,
             )
-            end_nice = format_date(
+            end_nice = formatter.format_date(
                 datetime.fromordinal(r[start_index + nights - 1] + 1),
-                format_string=INPUT_DATE_FORMAT,
+                format_string=DateFormat.INPUT_DATE_FORMAT.value,
             )
             long_enough_consecutive_ranges.append((start_nice, end_nice))
 
     return long_enough_consecutive_ranges
 
 
-def check_park(park_id, start_date, end_date, campsite_type, nights=None):
+def check_park(
+    park_id, start_date, end_date, campsite_type, campsite_ids=(), nights=None
+):
     park_information = get_park_information(
-        park_id, start_date, end_date, campsite_type
+        park_id, start_date, end_date, campsite_type, campsite_ids
     )
     LOG.debug(
         "Information for park {}: {}".format(
             park_id, json.dumps(park_information, indent=2)
         )
     )
-    name_of_park = get_name_of_park(park_id)
+    park_name = RecreationClient.get_park_name(park_id)
     current, maximum, availabilities_filtered = get_num_available_sites(
         park_information, start_date, end_date, nights=nights
     )
-    return current, maximum, availabilities_filtered, name_of_park
+    return current, maximum, availabilities_filtered, park_name
 
 
 def output_human_output(parks):
     out = []
-    availabilities = False
+    has_availabilities = False
     for park_id in parks:
-        current, maximum, _, name_of_park = check_park(
-            park_id, args.start_date, args.end_date, args.campsite_type, nights=args.nights
+        current, maximum, available_dates_by_site_id, park_name = check_park(
+            park_id,
+            args.start_date,
+            args.end_date,
+            args.campsite_type,
+            args.campsite_ids,
+            nights=args.nights,
         )
         if current:
-            emoji = SUCCESS_EMOJI
-            availabilities = True
+            emoji = Emoji.SUCCESS.value
+            has_availabilities = True
         else:
-            emoji = FAILURE_EMOJI
+            emoji = Emoji.FAILURE.value
 
         out.append(
-            "{} {} ({}): {} site(s) available out of {} site(s)".format(
-                emoji, name_of_park, park_id, current, maximum
+            "{emoji} {park_name} ({park_id}): {current} site(s) available out of {maximum} site(s)".format(
+                emoji=emoji,
+                park_name=park_name,
+                park_id=park_id,
+                current=current,
+                maximum=maximum,
             )
         )
 
-    if availabilities:
+        # Displays campsite ID and availability dates.
+        if args.show_campsite_info and available_dates_by_site_id:
+            for site_id, dates in available_dates_by_site_id.items():
+                out.append(
+                    "  * Site {site_id} is available on the following dates:".format(
+                        site_id=site_id
+                    )
+                )
+                for date in dates:
+                    out.append(
+                        "    * {start} -> {end}".format(
+                            start=date["start"], end=date["end"]
+                        )
+                    )
+
+    if has_availabilities:
         print(
-            "There are campsites available from {} to {}!!!".format(
-                args.start_date.strftime(INPUT_DATE_FORMAT),
-                args.end_date.strftime(INPUT_DATE_FORMAT),
+            "There are campsites available from {start} to {end}!!!".format(
+                start=args.start_date.strftime(
+                    DateFormat.INPUT_DATE_FORMAT.value
+                ),
+                end=args.end_date.strftime(DateFormat.INPUT_DATE_FORMAT.value),
             )
         )
     else:
         print("There are no campsites available :(")
     print("\n".join(out))
-    return availabilities
+    return has_availabilities
 
 
 def output_json_output(parks):
     park_to_availabilities = {}
     availabilities = False
     for park_id in parks:
-        current, _, availabilities_filtered, _ = check_park(
-            park_id, args.start_date, args.end_date, args.campsite_type, nights=args.nights
+        current, _, availability_dates_by_site_id, _ = check_park(
+            park_id,
+            args.start_date,
+            args.end_date,
+            args.campsite_type,
+            nights=args.nights,
         )
         if current:
             availabilities = True
-            park_to_availabilities[park_id] = availabilities_filtered
+            park_to_availabilities[park_id] = availability_dates_by_site_id
 
     print(json.dumps(park_to_availabilities))
 
@@ -279,80 +285,15 @@ def main(parks, json_output=False):
         return output_human_output(parks)
 
 
-def valid_date(s):
-    try:
-        return datetime.strptime(s, INPUT_DATE_FORMAT)
-    except ValueError:
-        msg = "Not a valid date: '{0}'.".format(s)
-        raise argparse.ArgumentTypeError(msg)
-
-
-def positive_int(i):
-    i = int(i)
-    if i <= 0:
-        msg = "Not a valid number of nights: {0}".format(i)
-        raise argparse.ArgumentTypeError(msg)
-    return i
-
-
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--debug", "-d", action="store_true", help="Debug log level")
-    parser.add_argument(
-        "--start-date", required=True, help="Start date [YYYY-MM-DD]", type=valid_date
-    )
-    parser.add_argument(
-        "--end-date",
-        required=True,
-        help="End date [YYYY-MM-DD]. You expect to leave this day, not stay the night.",
-        type=valid_date,
-    )
-    parser.add_argument(
-        "--nights",
-        help="Number of consecutive nights (default is all nights in the given range).",
-        type=positive_int,
-    )
-    parser.add_argument(
-        "--campsite-num",
-        help="Optional, search for availability at specific campsite #",
-    )
-    parser.add_argument(
-        "--campsite-type",
-        help=(
-            "Optional, can specify type of campsite such as:"
-            '"STANDARD NONELECTRIC" or TODO'
-        ),
-    )
-    parser.add_argument(
-        "--json-output",
-        action="store_true",
-        help=(
-            "This make the script output JSON instead of human readable "
-            "output. Note, this is incompatible with the twitter notifier. "
-            "This output includes more precise information, such as the exact "
-            "avaiable dates and which sites are available."
-        ),
-    )
-    parks_group = parser.add_mutually_exclusive_group(required=True)
-    parks_group.add_argument(
-        "--parks", dest="parks", metavar="park", nargs="+", help="Park ID(s)", type=int
-    )
-    parks_group.add_argument(
-        "--stdin",
-        "-",
-        action="store_true",
-        help="Read list of park ID(s) from stdin instead",
-    )
-
+    parser = CampingArgParser()
     args = parser.parse_args()
 
     if args.debug:
         LOG.setLevel(logging.DEBUG)
 
-    parks = args.parks or [p.strip() for p in sys.stdin]
-
     try:
-        code = 0 if main(parks, json_output=args.json_output) else 1
+        code = 0 if main(args.parks, json_output=args.json_output) else 1
         sys.exit(code)
     except Exception:
         print("Something went wrong")
