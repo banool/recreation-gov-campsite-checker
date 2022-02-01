@@ -15,7 +15,7 @@ $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 232448
 ❌ BASIN MONTANA CAMPGROUND: 0 site(s) available out of 30 site(s)
 ```
 
-You can also read from stdin. Define a file (e.g. `parks.txt`) with IDs like this:
+You can also read from stdin. Define a file (e.g. `parks.txt`) with park IDs like this:
 ```
 232447
 232449
@@ -31,6 +31,21 @@ For powershell, try this:
 PS > Get-Content parks.txt | python camping.py --start-date 2021-09-24 --end-date 2022-09-24 --stdin
 ```
 
+If you want to see more information about which campsites are available, pass `--show-campsite-info` along with `--nights <int>`:
+```
+$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 232448 232450 232447 232770 --show-campsite-info --nights 1 
+There are campsites available from 2018-07-20 to 2018-07-23!!!
+🏕 ELK CREEK CAMPGROUND (SAWTOOTH NF) (232042): 1 site(s) available out of 1 site(s)
+  * Site 69800 is available on the following dates:
+    * 2018-07-20 -> 2018-07-21 
+    * 2018-07-21 -> 2018-07-22
+```
+
+If you only want results for certain campsite IDs, pass `--campsite-ids <int>`
+```bash
+$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 232431 --show-campsite-info --nights 1 --campsite-ids 18621 
+```
+
 You'll want to put this script into a 5 minute crontab. You could also grep the output for the success emoji (🏕) and then do something in response, like notify you that there is a campsite available. See the "Twitter Notification" section below.
 
 ## Number of nights
@@ -44,18 +59,16 @@ There are campsites available from 2020-06-01 to 2020-06-30!!!
 ## Getting park IDs
 What you'll want to do is go to https://recreation.gov and search for the campground you want. Click on it in the search sidebar. This should take you to a page for that campground, the URL will look like `https://www.recreation.gov/camping/campgrounds/<number>`. That number is the park ID.
 
-## Searching for availability at a specific campsite within a campground
-You can search for availablity at just a single specific campsite using the '--campsite-num' arugment.   This can be useful if you have a favorite campsite you like to use or if you have a reservation at a specific campsite that you want to add days to before or after your existing reservation.  This search only works for one campground/campsite combination at a time.
-```
-$ python camping.py --start-date 2020-06-01 --end-date 2020-06-30 --nights 5 --parks 234038 --campsite-num 6943
-There are campsites available from 2020-06-01 to 2020-06-30!!!
-🏕 CHISOS BASIN (BIG BEND) (234038): 1 site(s) available out of 62 site(s)
-```
-
-
 ## Getting campsite IDs
 Go to https://recreation.gov and first search for the campground you want and then select the specific campsite within that campground. The URL for the campsite should look like `https://www.recreation.gov/camping/campsites/<number>`. That number is the campsite ID.
 
+## Searching for availability at a specific campsite within a campground
+You can search for availablity at just a single specific campsite using the '--campsite-ids' argument.   This can be useful if you have a favorite campsite you like to use or if you have a reservation at a specific campsite that you want to add days to before or after your existing reservation.  This search only works for one campground/campsite combination at a time.
+```
+$ python camping.py --start-date 2020-06-01 --end-date 2020-06-30 --nights 5 --parks 234038 --campsite-ids 6943
+There are campsites available from 2020-06-01 to 2020-06-30!!!
+🏕 CHISOS BASIN (BIG BEND) (234038): 1 site(s) available out of 62 site(s)
+```
 
 You can also take [this site for a spin](https://pastudan.github.io/national-parks/). Thanks to [pastudan](https://github.com/pastudan)!
 
