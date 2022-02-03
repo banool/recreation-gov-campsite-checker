@@ -14,7 +14,7 @@ from clients.recreation_client import RecreationClient
 from enums.date_format import DateFormat
 from enums.emoji import Emoji
 from utils import formatter
-from utils.camping_argparser import CampingArgParser
+from utils.camping_argparser import CampingArgumentParser
 
 LOG = logging.getLogger(__name__)
 log_formatter = logging.Formatter(
@@ -200,18 +200,13 @@ def check_park(
     return current, maximum, availabilities_filtered, park_name
 
 
-def output_human_output(parks):
+def generate_human_output(
+    info_by_park_id, start_date, end_date, gen_campsite_info=False
+):
     out = []
     has_availabilities = False
-    for park_id in parks:
-        current, maximum, available_dates_by_site_id, park_name = check_park(
-            park_id,
-            args.start_date,
-            args.end_date,
-            args.campsite_type,
-            args.campsite_ids,
-            nights=args.nights,
-        )
+    for park_id, info in info_by_park_id.items():
+        current, maximum, available_dates_by_site_id, park_name = info
         if current:
             emoji = Emoji.SUCCESS.value
             has_availabilities = True
@@ -229,7 +224,7 @@ def output_human_output(parks):
         )
 
         # Displays campsite ID and availability dates.
-        if args.show_campsite_info and available_dates_by_site_id:
+        if gen_campsite_info and available_dates_by_site_id:
             for site_id, dates in available_dates_by_site_id.items():
                 out.append(
                     "  * Site {site_id} is available on the following dates:".format(
@@ -244,58 +239,61 @@ def output_human_output(parks):
                     )
 
     if has_availabilities:
-        print(
-            "There are campsites available from {start} to {end}!!!".format(
-                start=args.start_date.strftime(
-                    DateFormat.INPUT_DATE_FORMAT.value
-                ),
-                end=args.end_date.strftime(DateFormat.INPUT_DATE_FORMAT.value),
-            )
+        out.insert(
+            0,
+            "there are campsites available from {start} to {end}!!!".format(
+                start=start_date.strftime(DateFormat.INPUT_DATE_FORMAT.value),
+                end=end_date.strftime(DateFormat.INPUT_DATE_FORMAT.value),
+            ),
         )
     else:
-        print("There are no campsites available :(")
-    print("\n".join(out))
-    return has_availabilities
+        out.insert(0, "There are no campsites available :(")
+    return "\n".join(out), has_availabilities
 
 
-def output_json_output(parks):
-    park_to_availabilities = {}
-    availabilities = False
+def generate_json_output(info_by_park_id):
+    availabilities_by_park_id = {}
+    has_availabilities = False
+    for park_id, info in info_by_park_id.items():
+        current, _, available_dates_by_site_id, _ = info
+        if current:
+            has_availabilities = True
+            availabilities_by_park_id[park_id] = available_dates_by_site_id
+
+    return json.dumps(availabilities_by_park_id), has_availabilities
+
+
+def main(parks, json_output=False):
+    info_by_park_id = {}
     for park_id in parks:
-        current, _, availability_dates_by_site_id, _ = check_park(
+        info_by_park_id[park_id] = check_park(
             park_id,
             args.start_date,
             args.end_date,
             args.campsite_type,
+            args.campsite_ids,
             nights=args.nights,
         )
-        if current:
-            availabilities = True
-            park_to_availabilities[park_id] = availability_dates_by_site_id
 
-    print(json.dumps(park_to_availabilities))
-
-    return availabilities
-
-
-def main(parks, json_output=False):
     if json_output:
-        return output_json_output(parks)
+        output, has_availabilities = generate_json_output(info_by_park_id)
     else:
-        return output_human_output(parks)
+        output, has_availabilities = generate_human_output(
+            info_by_park_id,
+            args.start_date,
+            args.end_date,
+            args.show_campsite_info,
+        )
+    print(output)
+    return has_availabilities
 
 
 if __name__ == "__main__":
-    parser = CampingArgParser()
+    parser = CampingArgumentParser()
     args = parser.parse_args()
 
     if args.debug:
         LOG.setLevel(logging.DEBUG)
 
-    try:
-        code = 0 if main(args.parks, json_output=args.json_output) else 1
-        sys.exit(code)
-    except Exception:
-        print("Something went wrong")
-        LOG.exception("Something went wrong")
-        raise
+    code = 0 if main(args.parks, json_output=args.json_output) else 1
+    sys.exit(code)

@@ -1,6 +1,5 @@
 from setuptools import find_packages, setup
 
-
 README_FILE = "README.md"
 REQUIREMENTS_FILE = "requirements.txt"
 
