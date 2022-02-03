@@ -93,6 +93,13 @@ Note: `black` only really supports 3.6+ so watch out!
 
 Feel free to submit pull requests, or look at the original: https://github.com/bri-bri/yosemite-camping
 
+### Running Tests
+
+All tests should pass before a pull request gets merged. To run all the tests, cd into the project directory and run:
+```bash
+python -m unittest
+``` 
+
 ### Differences from the original
 - Python 3 🐍🐍🐍.
 - Park IDs not hardcoded, passed via the CLI instead.
