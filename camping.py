@@ -295,5 +295,4 @@ if __name__ == "__main__":
     if args.debug:
         LOG.setLevel(logging.DEBUG)
 
-    code = 0 if main(args.parks, json_output=args.json_output) else 1
-    sys.exit(code)
+    main(args.parks, json_output=args.json_output)
