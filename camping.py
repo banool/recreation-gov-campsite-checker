@@ -8,13 +8,13 @@ from datetime import datetime, timedelta
 from itertools import count, groupby
 
 from dateutil import rrule
+from discord_webhook import DiscordWebhook
 
 from clients.recreation_client import RecreationClient
 from enums.date_format import DateFormat
 from enums.emoji import Emoji
 from utils import formatter
 from utils.camping_argparser import CampingArgumentParser
-from discord_webhook import DiscordWebhook
 
 LOG = logging.getLogger(__name__)
 log_formatter = logging.Formatter(
@@ -262,6 +262,7 @@ def generate_json_output(info_by_park_id):
 
     return json.dumps(availabilities_by_park_id), has_availabilities
 
+
 def generate_discord_output(info_by_park_id):
     out = ""
     has_availabilities = False
@@ -279,7 +280,8 @@ def generate_discord_output(info_by_park_id):
 
     return out, has_availabilities
 
-def main(parks, json_output=False, discord_webhook_url=''):
+
+def main(parks, json_output=False, discord_webhook_url=""):
     info_by_park_id = {}
     for park_id in parks:
         info_by_park_id[park_id] = check_park(
@@ -291,14 +293,14 @@ def main(parks, json_output=False, discord_webhook_url=''):
             nights=args.nights,
         )
 
-    if discord_webhook_url != '':
+    if discord_webhook_url != "":
         content, has_availabilities = generate_discord_output(info_by_park_id)
         if has_availabilities:
             webhook = DiscordWebhook(url=discord_webhook_url, content=content)
             response = webhook.execute()
             print(response)
         else:
-            print('No campsites found; not issuing Discord webhook request')
+            print("No campsites found; not issuing Discord webhook request")
 
     if json_output:
         output, has_availabilities = generate_json_output(info_by_park_id)
@@ -320,4 +322,8 @@ if __name__ == "__main__":
     if args.debug:
         LOG.setLevel(logging.DEBUG)
 
-    main(args.parks, json_output=args.json_output, discord_webhook_url=args.discord_webhook)
+    main(
+        args.parks,
+        json_output=args.json_output,
+        discord_webhook_url=args.discord_webhook,
+    )

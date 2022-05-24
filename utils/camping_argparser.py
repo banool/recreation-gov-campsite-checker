@@ -62,9 +62,7 @@ class CampingArgumentParser(argparse.ArgumentParser):
             "--discord-webhook",
             type=str,
             nargs=1,
-            help=(
-                "Discord URL webhook to invoke when a campsite is found."
-            ),
+            help=("Discord URL webhook to invoke when a campsite is found."),
         )
         parks_group = self.add_mutually_exclusive_group(required=True)
         parks_group.add_argument(
