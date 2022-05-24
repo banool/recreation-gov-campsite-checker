@@ -107,6 +107,17 @@ python -m unittest
 - Works with any park out of the box, not just those in Yosemite like with the original.
 - **Update 2018-10-21:** Works with the new recreation.gov site.
 
+## Discord Notification
+If you want to be notified for any available campsites via Discord, you can do so using a Discord Webhook.
+
+1. Find a channel in your Discord server you want the scraper to post to, and go to `Edit Channel -> Integrations -> Webhooks -> New Webhook`.
+2. Name the webhook whatever you like (optionally set an avatar). Copy the Webhook URL using the button below the Name field.
+3. Provide the webhook url as the argument `--discord-webhook` to the `camping.py` script alongside your other args. For example:
+
+`python camping.py --start-date 2022-12-01 --end-date 2022-12-31 --discord-webhook https://discord.com/api/webhooks/...`
+
+The bot will only post messages for campsites that have availability given your provided constraints, and provide links directly to the available campsite pages for your convenience.
+
 ## Twitter Notification
 If you want to be notified about campsite availabilities via Twitter (they're the only API out there that is actually easy to use), you can do this:
 1. Make an app via Twitter. It's pretty easy, go to: https://apps.twitter.com/app/new.
