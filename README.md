@@ -41,7 +41,7 @@ There are campsites available from 2018-07-20 to 2018-07-23!!!
     * 2018-07-21 -> 2018-07-22
 ```
 
-If you only want results for certain campsite IDs, pass `--campsite-ids <int>`
+If you only want results for certain campsite IDs, pass `--campsite-ids <int>`:
 ```bash
 $ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 232431 --show-campsite-info --nights 1 --campsite-ids 18621 
 ```
@@ -63,7 +63,7 @@ What you'll want to do is go to https://recreation.gov and search for the campgr
 Go to https://recreation.gov and first search for the campground you want and then select the specific campsite within that campground. The URL for the campsite should look like `https://www.recreation.gov/camping/campsites/<number>`. That number is the campsite ID.
 
 ## Searching for availability at a specific campsite within a campground
-You can search for availablity at just a single specific campsite using the '--campsite-ids' argument.   This can be useful if you have a favorite campsite you like to use or if you have a reservation at a specific campsite that you want to add days to before or after your existing reservation.  This search only works for one campground/campsite combination at a time.
+You can search for availability at just a single specific campsite using the '--campsite-ids' argument. This can be useful if you have a favorite campsite you like to use or if you have a reservation at a specific campsite that you want to add days to before or after your existing reservation. This search only works for one campground/campsite combination at a time.
 ```
 $ python camping.py --start-date 2020-06-01 --end-date 2020-06-30 --nights 5 --parks 234038 --campsite-ids 6943
 There are campsites available from 2020-06-01 to 2020-06-30!!!

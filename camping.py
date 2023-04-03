@@ -36,7 +36,7 @@ def get_park_information(
 
     The only API to get availability information is the `month?` query param
     on the availability endpoint. You must query with the first of the month.
-    This means if `start_date` and `end_date` cross a month bounday, we must
+    This means if `start_date` and `end_date` cross a month boundary, we must
     hit the endpoint multiple times.
 
     The output of this function looks like this:
@@ -159,12 +159,12 @@ def consecutive_nights(available, nights):
     ]
     c = count()
 
-    consective_ranges = list(
+    consecutive_ranges = list(
         list(g) for _, g in groupby(ordinal_dates, lambda x: x - next(c))
     )
 
     long_enough_consecutive_ranges = []
-    for r in consective_ranges:
+    for r in consecutive_ranges:
         # Skip ranges that are too short.
         if len(r) < nights:
             continue
