@@ -93,15 +93,22 @@ def get_park_information(
 
     return data
 
+def is_weekend(date):
+    weekday = date.weekday()
+
+    return weekday == 4 or weekday == 5
+
 
 def get_num_available_sites(
-    park_information, start_date, end_date, nights=None
+    park_information, start_date, end_date, nights=None, weekends_only=False,
 ):
     maximum = len(park_information)
 
     num_available = 0
     num_days = (end_date - start_date).days
     dates = [end_date - timedelta(days=i) for i in range(1, num_days + 1)]
+    if weekends_only:
+        dates = filter(is_weekend, dates)
     dates = set(
         formatter.format_date(
             i, format_string=DateFormat.ISO_DATE_FORMAT_RESPONSE.value
@@ -183,7 +190,7 @@ def consecutive_nights(available, nights):
 
 
 def check_park(
-    park_id, start_date, end_date, campsite_type, campsite_ids=(), nights=None
+    park_id, start_date, end_date, campsite_type, campsite_ids=(), nights=None, weekends_only=False, excluded_site_ids=[],
 ):
     park_information = get_park_information(
         park_id, start_date, end_date, campsite_type, campsite_ids
@@ -195,7 +202,7 @@ def check_park(
     )
     park_name = RecreationClient.get_park_name(park_id)
     current, maximum, availabilities_filtered = get_num_available_sites(
-        park_information, start_date, end_date, nights=nights
+        park_information, start_date, end_date, nights=nights, weekends_only=weekends_only,
     )
     return current, maximum, availabilities_filtered, park_name
 
@@ -273,6 +280,7 @@ def main(parks, json_output=False):
             args.campsite_type,
             args.campsite_ids,
             nights=args.nights,
+            weekends_only=args.weekends_only,
         )
 
     if json_output:
