@@ -4,7 +4,6 @@
 import json
 import logging
 import sys
-import re
 from collections import defaultdict
 from datetime import datetime, timedelta
 from itertools import count, groupby
@@ -280,8 +279,9 @@ def remove_comments(lines: list[str]) -> list[str]:
             continue
 
         line = line.split(" #")[0]
-        if line.strip() != "":
-            new_lines.append(line)
+        stripped = line.strip()
+        if stripped != "":
+            new_lines.append(stripped)
 
     return new_lines
 
@@ -292,7 +292,7 @@ def main(parks, json_output=False):
     if args.exclusion_file:
         with open(args.exclusion_file, "r") as f:
             excluded_site_ids = f.readlines()
-            excluded_site_ids = [ l.strip() for l in excluded_site_ids ]
+            excluded_site_ids = [l.strip() for l in excluded_site_ids]
             excluded_site_ids = remove_comments(excluded_site_ids)
 
     info_by_park_id = {}
