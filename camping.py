@@ -4,6 +4,7 @@
 import json
 import logging
 import sys
+import re
 from collections import defaultdict
 from datetime import datetime, timedelta
 from itertools import count, groupby
@@ -26,7 +27,7 @@ LOG.addHandler(sh)
 
 
 def get_park_information(
-    park_id, start_date, end_date, campsite_type=None, campsite_ids=()
+    park_id, start_date, end_date, campsite_type=None, campsite_ids=(), excluded_site_ids=[]
 ):
     """
     This function consumes the user intent, collects the necessary information
@@ -67,6 +68,8 @@ def get_park_information(
 
     for month_data in api_data:
         for campsite_id, campsite_data in month_data["campsites"].items():
+            if campsite_id in excluded_site_ids:
+                continue
             available = []
             a = data.setdefault(campsite_id, [])
             for date, availability_value in campsite_data[
@@ -193,7 +196,7 @@ def check_park(
     park_id, start_date, end_date, campsite_type, campsite_ids=(), nights=None, weekends_only=False, excluded_site_ids=[],
 ):
     park_information = get_park_information(
-        park_id, start_date, end_date, campsite_type, campsite_ids
+        park_id, start_date, end_date, campsite_type, campsite_ids, excluded_site_ids=excluded_site_ids,
     )
     LOG.debug(
         "Information for park {}: {}".format(
@@ -270,7 +273,28 @@ def generate_json_output(info_by_park_id):
     return json.dumps(availabilities_by_park_id), has_availabilities
 
 
+def remove_comments(lines: list[str]) -> list[str]:
+    new_lines = []
+    for line in lines:
+        if line.startswith("#"):  # Deal with comment as the first character
+            continue
+
+        line = line.split(" #")[0]
+        if line.strip() != "":
+            new_lines.append(line)
+
+    return new_lines
+
+
 def main(parks, json_output=False):
+    excluded_site_ids = []
+
+    if args.exclusion_file:
+        with open(args.exclusion_file, "r") as f:
+            excluded_site_ids = f.readlines()
+            excluded_site_ids = [ l.strip() for l in excluded_site_ids ]
+            excluded_site_ids = remove_comments(excluded_site_ids)
+
     info_by_park_id = {}
     for park_id in parks:
         info_by_park_id[park_id] = check_park(
@@ -281,6 +305,7 @@ def main(parks, json_output=False):
             args.campsite_ids,
             nights=args.nights,
             weekends_only=args.weekends_only,
+            excluded_site_ids=excluded_site_ids,
         )
 
     if json_output:

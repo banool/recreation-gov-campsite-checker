@@ -65,6 +65,12 @@ class CampingArgumentParser(argparse.ArgumentParser):
                 "Include only weekends (i.e. starting Friday or Saturday)"
             ),
         )
+        self.add_argument(
+            "--exclusion-file",
+            help=(
+                "File with site IDs to exclude"
+            ),
+        )
         parks_group = self.add_mutually_exclusive_group(required=True)
         parks_group.add_argument(
             "--parks",
