@@ -75,6 +75,7 @@ You can also take [this site for a spin](https://pastudan.github.io/national-par
 ## Installation
 
 I wrote this in Python 3.7 but I've tested it as working with 3.5 and 3.6 also.
+It is best to use 3.9+
 ```
 python3 -m venv myvenv
 source myvenv/bin/activate
