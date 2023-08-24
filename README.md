@@ -118,7 +118,7 @@ python -m unittest
 
 ## Twitter Notification
 If you want to be notified about campsite availabilities via Twitter (they're the only API out there that is actually easy to use), you can do this:
-1. Make an app via Twitter. It's pretty easy, go to: https://apps.twitter.com/app/new.
+1. Make an app via Twitter. It's pretty easy, go to: https://developer.twitter.com/en/apps.
 2. Change the values in `twitter_credentials.json` to match your key values.
 3. Pipe the output of your command into `notifier.py`. See below for an example.
 
