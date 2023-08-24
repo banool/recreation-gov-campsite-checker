@@ -72,6 +72,14 @@ There are campsites available from 2020-06-01 to 2020-06-30!!!
 
 You can also take [this site for a spin](https://pastudan.github.io/national-parks/). Thanks to [pastudan](https://github.com/pastudan)!
 
+## Excluding specific campsites
+
+You can exclude specific campsites, for example group sites, by defining a file (e.g. `excluded.txt`) with one campsite ID per line and using the `--exclusion-file` argument like this:
+
+```
+$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 232448 232450 232447 232770 --exclusion-file excluded.txt
+```
+
 ## Installation
 
 I wrote this in Python 3.7 but I've tested it as working with 3.5 and 3.6 also.
