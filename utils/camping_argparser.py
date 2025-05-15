@@ -28,6 +28,7 @@ class CampingArgumentParser(argparse.ArgumentParser):
             "--nights",
             help="Number of consecutive nights (default is all nights in the given range).",
             type=self.TypeConverter.positive_int,
+            default=1,
         )
         self.add_argument(
             "--campsite-ids",
