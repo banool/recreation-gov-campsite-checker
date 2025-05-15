@@ -6,13 +6,9 @@ This script scrapes the https://recreation.gov website for campsite availabiliti
 
 **Note:** Please don't abuse this script. Most folks out there don't know how to run scrapers against websites, so you're at an unfair advantage by using this.
 
-## Example Usage
+## Example Usage for Yosemite
 ```
-$ python camping.py --start-date 2018-07-20 --end-date 2018-07-23 --parks 232448 232450 232447 232770
-❌ TUOLUMNE MEADOWS: 0 site(s) available out of 148 site(s)
-🏕 LOWER PINES: 11 site(s) available out of 73 site(s)
-❌ UPPER PINES: 0 site(s) available out of 235 site(s)
-❌ BASIN MONTANA CAMPGROUND: 0 site(s) available out of 30 site(s)
+$ python camping.py --start-date 2025-05-18 --end-date 2025-05-21 --parks 232448 232450 232447 232449 --show-campsite-info --nights 1
 ```
 
 You can also read from stdin. Define a file (e.g. `parks.txt`) with park IDs like this:
