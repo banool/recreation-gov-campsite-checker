@@ -24,6 +24,12 @@ export CAMPSITE_EMAIL_PASSWORD="your-app-password"
    - Generate an App Password for "Mail"
    - Use that 16-character password
 
+**📱 Phone Notification Tip:** If using the same Gmail account for sender and receiver, use a Gmail alias for the sender to get phone notifications. For example:
+- **From:** `youremail+campsites@gmail.com`
+- **To:** `youremail@gmail.com`
+
+This tricks your phone into treating it as a "new email" and you'll get notifications!
+
 3. **Add to your shell profile** (optional, to persist across sessions):
 ```bash
 echo 'export CAMPSITE_FROM_EMAIL="your-email@gmail.com"' >> ~/.bashrc
