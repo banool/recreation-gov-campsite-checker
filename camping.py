@@ -17,6 +17,7 @@ from enums.date_format import DateFormat
 from enums.emoji import Emoji
 from utils import formatter
 from utils.camping_argparser import CampingArgumentParser
+from email_notifier import send_email_notification, load_email_config
 
 LOG = logging.getLogger(__name__)
 log_formatter = logging.Formatter(
@@ -106,7 +107,7 @@ def is_weekend(date):
 
 
 def get_num_available_sites(
-    park_information, start_date, end_date, nights=None, weekends_only=False,
+    park_information, start_date, end_date, nights=None, weekends_only=False, excluded_dates=None,
 ):
     maximum = len(park_information)
 
@@ -121,6 +122,15 @@ def get_num_available_sites(
         )
         for i in dates
     )
+    
+    if excluded_dates:
+        excluded_dates_str = set(
+            formatter.format_date(
+                d, format_string=DateFormat.ISO_DATE_FORMAT_RESPONSE.value
+            )
+            for d in excluded_dates
+        )
+        dates = dates - excluded_dates_str
 
     if nights not in range(1, num_days + 1):
         nights = num_days
@@ -196,7 +206,7 @@ def consecutive_nights(available, nights):
 
 
 def check_park(
-    park_id, start_date, end_date, campsite_type, campsite_ids=(), nights=None, weekends_only=False, excluded_site_ids=[],
+    park_id, start_date, end_date, campsite_type, campsite_ids=(), nights=None, weekends_only=False, excluded_site_ids=[], excluded_dates=None,
 ):
     park_information = get_park_information(
         park_id, start_date, end_date, campsite_type, campsite_ids, excluded_site_ids=excluded_site_ids,
@@ -208,7 +218,7 @@ def check_park(
     )
     park_name = RecreationClient.get_park_name(park_id)
     current, maximum, availabilities_filtered = get_num_available_sites(
-        park_information, start_date, end_date, nights=nights, weekends_only=weekends_only,
+        park_information, start_date, end_date, nights=nights, weekends_only=weekends_only, excluded_dates=excluded_dates,
     )
     return current, maximum, availabilities_filtered, park_name
 
@@ -226,6 +236,9 @@ def generate_human_output(
             sound_file_linux = "/usr/share/sounds/freedesktop/stereo/complete.oga"
             if platform.system() == 'Linux' and os.path.exists(sound_file_linux):
                 os.system(f"paplay {sound_file_linux}")
+            # Play sound on macOS
+            elif platform.system() == 'Darwin':
+                os.system('afplay /System/Library/Sounds/Ping.aiff')
             has_availabilities = True
         else:
             emoji = Emoji.FAILURE.value
@@ -335,6 +348,7 @@ def main(parks, json_output=False):
                 nights=args.nights,
                 weekends_only=args.weekends_only,
                 excluded_site_ids=excluded_site_ids,
+                excluded_dates=args.excluded_dates,
             )
 
         if json_output:
@@ -347,6 +361,15 @@ def main(parks, json_output=False):
                 args.show_campsite_info,
             )
         print(output)
+        
+        # Send email notification if campsites are available
+        if has_availabilities and args.email_notifications:
+            email_config = load_email_config()
+            if email_config:
+                # Filter to only include parks with availabilities
+                available_parks = {k: v for k, v in info_by_park_id.items() if v[0] > 0}
+                send_email_notification(available_parks, email_config)
+        
         return has_availabilities
     except Exception as e:
         print(e)

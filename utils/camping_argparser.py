@@ -72,6 +72,18 @@ class CampingArgumentParser(argparse.ArgumentParser):
                 "File with site IDs to exclude"
             ),
         )
+        self.add_argument(
+            "--excluded-dates",
+            type=self.TypeConverter.date,
+            nargs="+",
+            default=[],
+            help="Optional, list of dates to exclude from availability search [YYYY-MM-DD].",
+        )
+        self.add_argument(
+            "--email-notifications",
+            action="store_true",
+            help="Send email notifications when campsites become available. Requires email configuration via environment variables.",
+        )
         parks_group = self.add_mutually_exclusive_group(required=True)
         parks_group.add_argument(
             "--parks",
