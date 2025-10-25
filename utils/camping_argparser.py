@@ -28,6 +28,7 @@ class CampingArgumentParser(argparse.ArgumentParser):
             "--nights",
             help="Number of consecutive nights (default is all nights in the given range).",
             type=self.TypeConverter.positive_int,
+            default=1,
         )
         self.add_argument(
             "--campsite-ids",
@@ -70,6 +71,18 @@ class CampingArgumentParser(argparse.ArgumentParser):
             help=(
                 "File with site IDs to exclude"
             ),
+        )
+        self.add_argument(
+            "--excluded-dates",
+            type=self.TypeConverter.date,
+            nargs="+",
+            default=[],
+            help="Optional, list of dates to exclude from availability search [YYYY-MM-DD].",
+        )
+        self.add_argument(
+            "--email-notifications",
+            action="store_true",
+            help="Send email notifications when campsites become available. Requires email configuration via environment variables.",
         )
         parks_group = self.add_mutually_exclusive_group(required=True)
         parks_group.add_argument(
