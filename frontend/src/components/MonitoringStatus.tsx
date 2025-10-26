@@ -5,6 +5,7 @@ import type { SSEStatusEvent, SSEErrorEvent } from '../types/index';
 import { Activity, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
 
+
 interface MonitoringStatusProps {
   status: SSEStatusEvent | null;
   error: SSEErrorEvent | null;
@@ -16,12 +17,14 @@ export function MonitoringStatus({ status, error, isConnected, onStop }: Monitor
   const [timeUntilNext, setTimeUntilNext] = useState<number>(20);
   const [lastCheckTime, setLastCheckTime] = useState<Date | null>(null);
   const [lastError, setLastError] = useState<SSEErrorEvent | null>(null);
+  const [failedCheckCount, setFailedCheckCount] = useState<number>(0);
 
   // Track errors
   useEffect(() => {
     if (error) {
       setLastError(error);
-      // Clear error after 30 seconds
+      setFailedCheckCount(prev => prev + 1);
+      // Clear error message after 30 seconds (but keep the count)
       const timeout = setTimeout(() => setLastError(null), 30000);
       return () => clearTimeout(timeout);
     }
@@ -48,6 +51,13 @@ export function MonitoringStatus({ status, error, isConnected, onStop }: Monitor
 
     return () => clearInterval(interval);
   }, [lastCheckTime, status?.state]);
+
+  // Reset failed check count when monitoring stops
+  useEffect(() => {
+    if (!status || status.state === 'stopped') {
+      setFailedCheckCount(0);
+    }
+  }, [status?.state]);
 
   if (!status || status.state === 'stopped') {
     return (
@@ -96,7 +106,7 @@ export function MonitoringStatus({ status, error, isConnected, onStop }: Monitor
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="flex flex-col">
             <span className="text-xs text-gray-500 uppercase font-semibold mb-1">
               Connection Status
@@ -117,6 +127,18 @@ export function MonitoringStatus({ status, error, isConnected, onStop }: Monitor
             </span>
             <span className="text-lg font-bold text-gray-900">
               {status.checkNumber || 0}
+            </span>
+          </div>
+
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 uppercase font-semibold mb-1">
+              Failed Checks
+            </span>
+            <span className={`flex items-center gap-2 text-lg font-bold ${
+              failedCheckCount > 0 ? 'text-yellow-600' : 'text-gray-900'
+            }`}>
+              {failedCheckCount > 0 && <AlertTriangle className="h-4 w-4" />}
+              {failedCheckCount}
             </span>
           </div>
 

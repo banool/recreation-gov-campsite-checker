@@ -162,6 +162,9 @@ class MonitoringService {
         [pythonScriptPath, JSON.stringify(pythonConfig)],
         {
           cwd: path.join(__dirname, '../../python'),
+          env: {
+            ...process.env, // Pass all environment variables to Python
+          },
         }
       );
 

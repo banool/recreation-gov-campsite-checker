@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/Card';
 import { Input } from './ui/Input';
 import { Label } from './ui/Label';
 import { Button } from './ui/Button';
+import { Select } from './ui/Select';
 import type { MonitoringConfig } from '../types/index';
 import { format } from 'date-fns';
 import { useFacilitySearch } from '../hooks/useFacilitySearch';
+import { X } from 'lucide-react';
+import { CAMPSITE_TYPES } from '../constants/campsiteTypes';
 
 interface SearchFormProps {
   onSubmit: (config: MonitoringConfig) => void;
@@ -35,17 +38,121 @@ export function SearchForm({ onSubmit, isMonitoring }: SearchFormProps) {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedFacilities, setSelectedFacilities] = useState<SelectedFacility[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Excluded dates
+  const [excludedDates, setExcludedDates] = useState<string[]>([]);
+
+  // Track if we've loaded from URL to prevent overwriting
+  const [hasLoadedFromUrl, setHasLoadedFromUrl] = useState(false);
 
   // Use the facility search hook
   const { facilities, loading } = useFacilitySearch(searchQuery);
+
+  // Click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showDropdown]);
+
+  // Load state from URL params on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    
+    if (params.has('campgrounds')) {
+      const ids = params.get('campgrounds')!.split(',');
+      const names = params.has('campgroundNames') ? params.get('campgroundNames')!.split(',') : ids;
+      const facilities = ids.map((id, idx) => ({
+        id: id.trim(),
+        name: names[idx]?.trim() || `Campground ${id}`
+      }));
+      setSelectedFacilities(facilities);
+    }
+    
+    if (params.has('start')) {
+      setStartDate(params.get('start')!);
+    }
+    
+    if (params.has('end')) {
+      setEndDate(params.get('end')!);
+    }
+    
+    if (params.has('nights')) {
+      setNights(parseInt(params.get('nights')!));
+    }
+    
+    if (params.has('weekends')) {
+      setWeekendsOnly(params.get('weekends') === 'true');
+    }
+    
+    if (params.has('type')) {
+      setCampsiteType(params.get('type')!);
+    }
+    
+    if (params.has('campsiteIds')) {
+      setCampsiteIds(params.get('campsiteIds')!);
+    }
+    
+    if (params.has('email')) {
+      setEmailNotifications(params.get('email') === 'true');
+    }
+    
+    if (params.has('browser')) {
+      setBrowserNotifications(params.get('browser') === 'true');
+    }
+
+    if (params.has('excludedDates')) {
+      const dates = params.get('excludedDates')!.split(',').map(d => d.trim());
+      setExcludedDates(dates);
+    }
+
+    // Mark that we've loaded from URL
+    setHasLoadedFromUrl(true);
+  }, []); // Only run on mount
+
+  // Sync form state to URL params whenever it changes (but skip on initial mount)
+  useEffect(() => {
+    // Skip URL sync until we've loaded from URL first
+    if (!hasLoadedFromUrl) {
+      return;
+    }
+    const params = new URLSearchParams();
+    
+    if (selectedFacilities.length > 0) {
+      params.set('campgrounds', selectedFacilities.map(f => f.id).join(','));
+      params.set('campgroundNames', selectedFacilities.map(f => f.name).join(','));
+    }
+    
+    if (startDate) params.set('start', startDate);
+    if (endDate) params.set('end', endDate);
+    if (nights) params.set('nights', nights.toString());
+    if (weekendsOnly) params.set('weekends', 'true');
+    if (campsiteType) params.set('type', campsiteType);
+    if (campsiteIds) params.set('campsiteIds', campsiteIds);
+    if (emailNotifications) params.set('email', 'true');
+    if (!browserNotifications) params.set('browser', 'false'); // Only set if false since true is default
+    if (excludedDates.length > 0) params.set('excludedDates', excludedDates.join(','));
+    
+    // Update URL without triggering navigation
+    const newUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+  }, [hasLoadedFromUrl, selectedFacilities, startDate, endDate, nights, weekendsOnly, campsiteType, campsiteIds, emailNotifications, browserNotifications, excludedDates]);
 
   const handleFacilitySelect = (facility: { id: string; name: string }) => {
     // Don't add duplicates
     if (!selectedFacilities.find(f => f.id === facility.id)) {
       setSelectedFacilities([...selectedFacilities, facility]);
     }
-    setSearchQuery('');
-    setShowDropdown(false);
+    // Keep dropdown open with current search results - don't clear searchQuery
+    // User can manually clear or type new search if they want
   };
 
   const handleRemoveFacility = (facilityId: string) => {
@@ -79,6 +186,7 @@ export function SearchForm({ onSubmit, isMonitoring }: SearchFormProps) {
       weekendsOnly,
       campsiteType: campsiteType || undefined,
       campsiteIds: siteIds.length > 0 ? siteIds : undefined,
+      excludedDates: excludedDates.length > 0 ? excludedDates : undefined,
       emailNotifications,
       browserNotifications,
     };
@@ -101,7 +209,7 @@ export function SearchForm({ onSubmit, isMonitoring }: SearchFormProps) {
             <Label htmlFor="campgroundSearch">
               Search Campgrounds <span className="text-red-500">*</span>
             </Label>
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <Input
                 id="campgroundSearch"
                 placeholder="Type to search (e.g., 'Yosemite', 'Joshua Tree')..."
@@ -117,37 +225,66 @@ export function SearchForm({ onSubmit, isMonitoring }: SearchFormProps) {
               {/* Dropdown with search results */}
               {showDropdown && searchQuery.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-80 overflow-y-auto">
-                  {loading ? (
-                    <div className="px-4 py-3 text-sm text-gray-500">
-                      Searching...
-                    </div>
-                  ) : facilities.length > 0 ? (
-                    facilities.map((facility) => (
-                      <button
-                        key={facility.id}
-                        type="button"
-                        onClick={() => handleFacilitySelect(facility)}
-                        className="w-full px-4 py-3 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none border-b border-gray-100 last:border-b-0"
-                      >
-                        <div className="font-medium text-sm">{facility.name}</div>
-                        <div className="text-xs text-gray-500 mt-1">
-                          {facility.city && facility.state && (
-                            <span>{facility.city}, {facility.state}</span>
-                          )}
-                          {facility.parentName && (
-                            <span className="ml-2">• {facility.parentName}</span>
-                          )}
-                        </div>
-                        <div className="text-xs text-gray-400 mt-1">
-                          ID: {facility.id}
-                        </div>
-                      </button>
-                    ))
-                  ) : (
-                    <div className="px-4 py-3 text-sm text-gray-500">
-                      No campgrounds found. Try a different search term.
-                    </div>
-                  )}
+                  {/* Close button */}
+                  <div className="sticky top-0 bg-gray-50 border-b border-gray-200 px-3 py-2 flex items-center justify-between">
+                    <span className="text-xs text-gray-600 font-medium">
+                      Click to select (dropdown stays open)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowDropdown(false)}
+                      className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-200"
+                      title="Close"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div>
+                    {loading ? (
+                      <div className="px-4 py-3 text-sm text-gray-500">
+                        Searching...
+                      </div>
+                    ) : facilities.length > 0 ? (
+                      facilities.map((facility) => {
+                        const isSelected = selectedFacilities.some(f => f.id === facility.id);
+                        return (
+                          <button
+                            key={facility.id}
+                            type="button"
+                            onClick={() => handleFacilitySelect(facility)}
+                            disabled={isSelected}
+                            className={`w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 ${
+                              isSelected 
+                                ? 'bg-blue-50 opacity-60 cursor-not-allowed' 
+                                : 'hover:bg-gray-100 focus:bg-gray-100'
+                            } focus:outline-none`}
+                          >
+                            <div className="font-medium text-sm flex items-center gap-2">
+                              {facility.name}
+                              {isSelected && (
+                                <span className="text-xs text-blue-600 font-normal">✓ Selected</span>
+                              )}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {facility.city && facility.state && (
+                                <span>{facility.city}, {facility.state}</span>
+                              )}
+                              {facility.parentName && (
+                                <span className="ml-2">• {facility.parentName}</span>
+                              )}
+                            </div>
+                            <div className="text-xs text-gray-400 mt-1">
+                              ID: {facility.id}
+                            </div>
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <div className="px-4 py-3 text-sm text-gray-500">
+                        No campgrounds found. Try a different search term.
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -238,15 +375,71 @@ export function SearchForm({ onSubmit, isMonitoring }: SearchFormProps) {
               />
             </div>
 
+            {/* Excluded Dates */}
+            <div className="space-y-2">
+              <Label htmlFor="excludedDate">
+                Exclude Specific Dates (Optional)
+              </Label>
+              <Input
+                id="excludedDate"
+                type="date"
+                min={startDate}
+                max={endDate}
+                onChange={(e) => {
+                  const date = e.target.value;
+                  if (date && !excludedDates.includes(date)) {
+                    setExcludedDates([...excludedDates, date]);
+                  }
+                  // Reset the input
+                  e.target.value = '';
+                }}
+                disabled={isMonitoring}
+              />
+              <p className="text-xs text-gray-500">
+                Click to select dates within your range to exclude from the search
+              </p>
+
+              {/* Excluded Dates Badges */}
+              {excludedDates.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {excludedDates.map((date) => (
+                    <div
+                      key={date}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-100 text-red-800 rounded-full text-sm"
+                    >
+                      <span className="font-medium">{format(new Date(date + 'T00:00:00'), 'MMM d, yyyy')}</span>
+                      <button
+                        type="button"
+                        onClick={() => setExcludedDates(excludedDates.filter(d => d !== date))}
+                        disabled={isMonitoring}
+                        className="hover:bg-red-200 rounded-full p-0.5 transition-colors disabled:opacity-50"
+                        title="Remove"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="campsiteType">Campsite Type (Optional)</Label>
-              <Input
+              <Select
                 id="campsiteType"
-                placeholder="STANDARD NONELECTRIC"
                 value={campsiteType}
                 onChange={(e) => setCampsiteType(e.target.value)}
                 disabled={isMonitoring}
-              />
+              >
+                {CAMPSITE_TYPES.map((type) => (
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
+                ))}
+              </Select>
+              <p className="text-xs text-gray-500">
+                Filter by specific campsite type (leave as "Any" to see all types)
+              </p>
             </div>
 
             <div className="space-y-2">

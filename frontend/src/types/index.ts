@@ -59,5 +59,6 @@ export interface SSEResultsEvent extends MonitoringResult {
 export interface SSEErrorEvent {
   message: string;
   timestamp: string;
+  checkNumber?: number;
 }
 
