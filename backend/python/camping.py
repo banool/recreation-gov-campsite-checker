@@ -381,10 +381,8 @@ if __name__ == "__main__":
 
     if args.debug:
         LOG.setLevel(logging.DEBUG)
-    while True:
-        try:
-            main(args.parks, json_output=args.json_output)
-        except Exception as e:
-            print(e)
-        time.sleep(20)
     
+    try:
+        main(args.parks, json_output=args.json_output)
+    except Exception as e:
+        print(e)

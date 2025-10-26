@@ -1,7 +1,48 @@
+# Python
 /myvenv/
 __pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+*.swp
+.Python
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+/frontend/dist
+/frontend/build
+/backend/dist
+/backend/build
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Email timestamp tracking
+.email_timestamp_*.json
+
+# Legacy
 /next*
 /tweetlog
 /twitter_credentials.py
-*.swp
-*egg-info

@@ -26,7 +26,7 @@ def send_email_notification(availabilities_info, email_config, min_interval_minu
     
     # Check rate limiting
     if not should_send_email(availabilities_info, min_interval_minutes):
-        print(f"⏰ Email rate limited - waiting {min_interval_minutes} minutes between notifications")
+        print(f"⏰ Email rate limited - waiting {min_interval_minutes} minutes between notifications", file=sys.stderr)
         return False
     
     # Create message
@@ -52,13 +52,13 @@ def send_email_notification(availabilities_info, email_config, min_interval_minu
             server.starttls(context=context)
             server.login(email_config["from_email"], email_config["password"])
             server.sendmail(email_config["from_email"], email_config["to_email"], msg.as_string())
-        print(f"✅ Email notification sent to {email_config['to_email']}")
+        print(f"✅ Email notification sent to {email_config['to_email']}", file=sys.stderr)
         
         # Update the last sent time
         update_last_email_time(availabilities_info)
         return True
     except Exception as e:
-        print(f"❌ Failed to send email: {e}")
+        print(f"❌ Failed to send email: {e}", file=sys.stderr)
         return False
 
 def should_send_email(availabilities_info, min_interval_minutes):
@@ -89,12 +89,12 @@ def should_send_email(availabilities_info, min_interval_minutes):
                 
                 if time_since_last < min_interval_minutes:
                     remaining_minutes = min_interval_minutes - time_since_last
-                    print(f"⏰ Last email sent {time_since_last:.1f} minutes ago. Waiting {remaining_minutes:.1f} more minutes.")
+                    print(f"⏰ Last email sent {time_since_last:.1f} minutes ago. Waiting {remaining_minutes:.1f} more minutes.", file=sys.stderr)
                     return False
         
         return True
     except Exception as e:
-        print(f"⚠️ Error checking email rate limit: {e}")
+        print(f"⚠️ Error checking email rate limit: {e}", file=sys.stderr)
         return True  # Allow email if we can't check the rate limit
 
 def update_last_email_time(availabilities_info):
@@ -110,7 +110,7 @@ def update_last_email_time(availabilities_info):
         with open(timestamp_file, 'w') as f:
             json.dump(data, f)
     except Exception as e:
-        print(f"⚠️ Error updating email timestamp: {e}")
+        print(f"⚠️ Error updating email timestamp: {e}", file=sys.stderr)
 
 def create_availability_hash(availabilities_info):
     """
@@ -199,19 +199,19 @@ def load_email_config():
     
     # Check if all required fields are present
     if not all([config["from_email"], config["password"], config["to_email"]]):
-        print("❌ Email configuration missing. Please set environment variables:")
-        print("   CAMPSITE_FROM_EMAIL=your-email@gmail.com")
-        print("   CAMPSITE_EMAIL_PASSWORD=your-app-password")
-        print("   CAMPSITE_TO_EMAIL=recipient@gmail.com")
-        print("   Optional: CAMPSITE_SMTP_SERVER (default: smtp.gmail.com)")
-        print("   Optional: CAMPSITE_SMTP_PORT (default: 587)")
+        print("❌ Email configuration missing. Please set environment variables:", file=sys.stderr)
+        print("   CAMPSITE_FROM_EMAIL=your-email@gmail.com", file=sys.stderr)
+        print("   CAMPSITE_EMAIL_PASSWORD=your-app-password", file=sys.stderr)
+        print("   CAMPSITE_TO_EMAIL=recipient@gmail.com", file=sys.stderr)
+        print("   Optional: CAMPSITE_SMTP_SERVER (default: smtp.gmail.com)", file=sys.stderr)
+        print("   Optional: CAMPSITE_SMTP_PORT (default: 587)", file=sys.stderr)
         return None
     
     return config
 
 if __name__ == "__main__":
     # Test the email functionality
-    print("Testing email notification...")
+    print("Testing email notification...", file=sys.stderr)
     
     config = load_email_config()
     if not config:
@@ -227,6 +227,6 @@ if __name__ == "__main__":
     
     success = send_email_notification(test_availabilities, config)
     if success:
-        print("✅ Test email sent successfully!")
+        print("✅ Test email sent successfully!", file=sys.stderr)
     else:
-        print("❌ Test email failed!")
+        print("❌ Test email failed!", file=sys.stderr)

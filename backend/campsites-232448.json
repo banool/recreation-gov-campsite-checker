@@ -1,0 +1,2184 @@
+{
+  "park_id": "232448",
+  "campsites": [
+    {
+      "id": "1290",
+      "name": "A001",
+      "type": "MANAGEMENT",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1291",
+      "name": "A002",
+      "type": "MANAGEMENT",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1207",
+      "name": "A003",
+      "type": "MANAGEMENT",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1292",
+      "name": "A004",
+      "type": "MANAGEMENT",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1293",
+      "name": "A005",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": true
+    },
+    {
+      "id": "1294",
+      "name": "A006",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1295",
+      "name": "A007",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1027",
+      "name": "A008",
+      "type": "MANAGEMENT",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1180",
+      "name": "A009",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "206",
+      "name": "A010",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1219",
+      "name": "A011",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "61",
+      "name": "A012",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "503",
+      "name": "A013",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1357",
+      "name": "A014",
+      "type": "WALK TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1296",
+      "name": "A015",
+      "type": "WALK TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "207",
+      "name": "A016",
+      "type": "HIKE TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1297",
+      "name": "A017",
+      "type": "WALK TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1226",
+      "name": "A018",
+      "type": "HIKE TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1326",
+      "name": "A019",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1298",
+      "name": "A020",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1299",
+      "name": "A021",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1202",
+      "name": "A022",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "208",
+      "name": "A023",
+      "type": "HIKE TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "209",
+      "name": "A024",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "211",
+      "name": "A025",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1220",
+      "name": "A026",
+      "type": "RV NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1337",
+      "name": "A027",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1030",
+      "name": "A028",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1267",
+      "name": "A029",
+      "type": "WALK TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1208",
+      "name": "A030",
+      "type": "HIKE TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1314",
+      "name": "A031",
+      "type": "HIKE TO",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1054",
+      "name": "A032",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1132",
+      "name": "A033",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1189",
+      "name": "A034",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1327",
+      "name": "A035",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1222",
+      "name": "A036",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1223",
+      "name": "A037",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "212",
+      "name": "A038",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1227",
+      "name": "A039",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1055",
+      "name": "A040",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "60",
+      "name": "A041",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": true
+    },
+    {
+      "id": "1190",
+      "name": "A042",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1203",
+      "name": "A043",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "1003",
+      "name": "A044",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "A",
+      "accessible": false
+    },
+    {
+      "id": "220",
+      "name": "B001",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1233",
+      "name": "B002",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1234",
+      "name": "B003",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1308",
+      "name": "B004",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1150",
+      "name": "B005",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1151",
+      "name": "B006",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1300",
+      "name": "B007",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1268",
+      "name": "B008",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1235",
+      "name": "B009",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1152",
+      "name": "B010",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1269",
+      "name": "B011",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1147",
+      "name": "B012",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1270",
+      "name": "B013",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1236",
+      "name": "B014",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1178",
+      "name": "B015",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1237",
+      "name": "B016",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1309",
+      "name": "B017",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1148",
+      "name": "B018",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1285",
+      "name": "B019",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1153",
+      "name": "B020",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1194",
+      "name": "B021",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1301",
+      "name": "B022",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1210",
+      "name": "B023",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1154",
+      "name": "B024",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1238",
+      "name": "B025",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1310",
+      "name": "B026",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1155",
+      "name": "B027",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1176",
+      "name": "B028",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1239",
+      "name": "B029",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1179",
+      "name": "B030",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1271",
+      "name": "B031",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1240",
+      "name": "B032",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1195",
+      "name": "B033",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1284",
+      "name": "B034",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1303",
+      "name": "B035",
+      "type": "MANAGEMENT",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1211",
+      "name": "B036",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1212",
+      "name": "B037",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": true
+    },
+    {
+      "id": "1328",
+      "name": "B038",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": true
+    },
+    {
+      "id": "1304",
+      "name": "B039",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": true
+    },
+    {
+      "id": "561",
+      "name": "B040",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1272",
+      "name": "B041",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1273",
+      "name": "B042",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1311",
+      "name": "B043",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1156",
+      "name": "B044",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1157",
+      "name": "B045",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1306",
+      "name": "B046",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1335",
+      "name": "B047",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1307",
+      "name": "B048",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1336",
+      "name": "B049",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "B",
+      "accessible": false
+    },
+    {
+      "id": "1359",
+      "name": "C001",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": true
+    },
+    {
+      "id": "1274",
+      "name": "C002",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1241",
+      "name": "C003",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1158",
+      "name": "C004",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1242",
+      "name": "C005",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1181",
+      "name": "C006",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1243",
+      "name": "C007",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1312",
+      "name": "C008",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1159",
+      "name": "C009",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1244",
+      "name": "C010",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1360",
+      "name": "C011",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1330",
+      "name": "C012",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "504",
+      "name": "C013",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1182",
+      "name": "C014",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1196",
+      "name": "C015",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1245",
+      "name": "C016",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1331",
+      "name": "C017",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1313",
+      "name": "C018",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1197",
+      "name": "C019",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1371",
+      "name": "C020",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1248",
+      "name": "C021",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1332",
+      "name": "C022",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1246",
+      "name": "C023",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1361",
+      "name": "C024",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1362",
+      "name": "C025",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1247",
+      "name": "C026",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1205",
+      "name": "C027",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1275",
+      "name": "C028",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1160",
+      "name": "C029",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1323",
+      "name": "C030",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1249",
+      "name": "C031",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1286",
+      "name": "C032",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1206",
+      "name": "C033",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "3",
+      "name": "C034",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1287",
+      "name": "C035",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1288",
+      "name": "C036",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1315",
+      "name": "C037",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1250",
+      "name": "C038",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1183",
+      "name": "C039",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1198",
+      "name": "C040",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1200",
+      "name": "C041",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1276",
+      "name": "C042",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1251",
+      "name": "C043",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1316",
+      "name": "C044",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1161",
+      "name": "C045",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1162",
+      "name": "C046",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1252",
+      "name": "C047",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1324",
+      "name": "C048",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1289",
+      "name": "C049",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1358",
+      "name": "C050",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1278",
+      "name": "C051",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1163",
+      "name": "C052",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1201",
+      "name": "C053",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "4",
+      "name": "C054",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1253",
+      "name": "C055",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "408",
+      "name": "C056",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1184",
+      "name": "C057",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1372",
+      "name": "C058",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1373",
+      "name": "C059",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1254",
+      "name": "C060",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "56",
+      "name": "C061",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "409",
+      "name": "C062",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "410",
+      "name": "C063",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "7",
+      "name": "C064",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1374",
+      "name": "C065",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1260",
+      "name": "C066",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1317",
+      "name": "C067",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1164",
+      "name": "C068",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1165",
+      "name": "C069",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1255",
+      "name": "C070",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1279",
+      "name": "C071",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1166",
+      "name": "C072",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1256",
+      "name": "C073",
+      "type": "HIKE TO",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1167",
+      "name": "C074",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": true
+    },
+    {
+      "id": "1375",
+      "name": "C075",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": true
+    },
+    {
+      "id": "1185",
+      "name": "C076",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1257",
+      "name": "C077",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1363",
+      "name": "C078",
+      "type": "HIKE TO",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "8",
+      "name": "C079",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1280",
+      "name": "C080",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1281",
+      "name": "C081",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1318",
+      "name": "C082",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1261",
+      "name": "C083",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1168",
+      "name": "C084",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1364",
+      "name": "C085",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1068",
+      "name": "C086",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1325",
+      "name": "C087",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1376",
+      "name": "C088",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "C",
+      "accessible": false
+    },
+    {
+      "id": "1186",
+      "name": "D001",
+      "type": "MANAGEMENT",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "432",
+      "name": "D002",
+      "type": "MANAGEMENT",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1171",
+      "name": "D003",
+      "type": "MANAGEMENT",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1262",
+      "name": "D004",
+      "type": "MANAGEMENT",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1103",
+      "name": "D005",
+      "type": "HIKE TO",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "433",
+      "name": "D006",
+      "type": "HIKE TO",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1104",
+      "name": "D007",
+      "type": "HIKE TO",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "15",
+      "name": "D008",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1172",
+      "name": "D009",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1263",
+      "name": "D010",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": true
+    },
+    {
+      "id": "1187",
+      "name": "D011",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1264",
+      "name": "D012",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1105",
+      "name": "D013",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1377",
+      "name": "D014",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1111",
+      "name": "D015",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1365",
+      "name": "D016",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1378",
+      "name": "D017",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1112",
+      "name": "D018",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1338",
+      "name": "D019",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1339",
+      "name": "D020",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1319",
+      "name": "D021",
+      "type": "MANAGEMENT",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1204",
+      "name": "D022",
+      "type": "MANAGEMENT",
+      "loop": "D",
+      "accessible": false
+    },
+    {
+      "id": "1173",
+      "name": "E001",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1265",
+      "name": "E002",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1340",
+      "name": "E003",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1341",
+      "name": "E004",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1366",
+      "name": "E005",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1342",
+      "name": "E006",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1343",
+      "name": "E007",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "16",
+      "name": "E008",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "453",
+      "name": "E009",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "454",
+      "name": "E010",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "455",
+      "name": "E011",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "38",
+      "name": "E012",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1367",
+      "name": "E013",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1344",
+      "name": "E014",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1379",
+      "name": "E015",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1345",
+      "name": "E016",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1346",
+      "name": "E017",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1347",
+      "name": "E018",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1224",
+      "name": "E019",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "E",
+      "accessible": false
+    },
+    {
+      "id": "1368",
+      "name": "F001",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "39",
+      "name": "F002",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "1380",
+      "name": "F003",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "1381",
+      "name": "F004",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "1349",
+      "name": "F005",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "1188",
+      "name": "F006",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "1348",
+      "name": "F007",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "479",
+      "name": "F008",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "1266",
+      "name": "F009",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "1320",
+      "name": "F010",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "F",
+      "accessible": false
+    },
+    {
+      "id": "480",
+      "name": "G001",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1382",
+      "name": "G002",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "562",
+      "name": "G003",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1350",
+      "name": "G004",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1351",
+      "name": "G005",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1383",
+      "name": "G006",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "45",
+      "name": "G007",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1384",
+      "name": "G008",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "577",
+      "name": "G009",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "578",
+      "name": "G010",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "46",
+      "name": "G011",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "489",
+      "name": "G012",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1352",
+      "name": "G013",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1353",
+      "name": "G014",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1354",
+      "name": "G015",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1369",
+      "name": "G016",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "490",
+      "name": "G017",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "55",
+      "name": "G018",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "502",
+      "name": "G019",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1174",
+      "name": "G020",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1355",
+      "name": "G021",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1356",
+      "name": "G022",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1370",
+      "name": "G023",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "G",
+      "accessible": false
+    },
+    {
+      "id": "1213",
+      "name": "A",
+      "type": "GROUP TENT ONLY AREA NONELECTRIC",
+      "loop": "Group",
+      "accessible": false
+    },
+    {
+      "id": "1175",
+      "name": "B",
+      "type": "GROUP TENT ONLY AREA NONELECTRIC",
+      "loop": "Group",
+      "accessible": false
+    },
+    {
+      "id": "1214",
+      "name": "C",
+      "type": "GROUP TENT ONLY AREA NONELECTRIC",
+      "loop": "Group",
+      "accessible": false
+    },
+    {
+      "id": "1215",
+      "name": "D",
+      "type": "GROUP TENT ONLY AREA NONELECTRIC",
+      "loop": "Group",
+      "accessible": false
+    },
+    {
+      "id": "1216",
+      "name": "E",
+      "type": "GROUP TENT ONLY AREA NONELECTRIC",
+      "loop": "Group",
+      "accessible": false
+    },
+    {
+      "id": "1305",
+      "name": "F",
+      "type": "GROUP TENT ONLY AREA NONELECTRIC",
+      "loop": "Group",
+      "accessible": false
+    },
+    {
+      "id": "1329",
+      "name": "G",
+      "type": "GROUP TENT ONLY AREA NONELECTRIC",
+      "loop": "Group",
+      "accessible": false
+    },
+    {
+      "id": "1225",
+      "name": "H001",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1321",
+      "name": "H002",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1031",
+      "name": "H003",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1199",
+      "name": "H004",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1322",
+      "name": "H005",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1191",
+      "name": "H006",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "213",
+      "name": "H007",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "214",
+      "name": "H008",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1050",
+      "name": "H009",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1193",
+      "name": "H010",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1135",
+      "name": "H011",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1192",
+      "name": "H012",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1302",
+      "name": "H013",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1034",
+      "name": "H014",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1177",
+      "name": "H015",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1058",
+      "name": "H016",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": true
+    },
+    {
+      "id": "1228",
+      "name": "H017",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": true
+    },
+    {
+      "id": "1169",
+      "name": "H018",
+      "type": "WALK TO",
+      "loop": "H",
+      "accessible": true
+    },
+    {
+      "id": "210",
+      "name": "H019",
+      "type": "WALK TO",
+      "loop": "H",
+      "accessible": true
+    },
+    {
+      "id": "1059",
+      "name": "H020",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "131",
+      "name": "H021",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1122",
+      "name": "H022",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1051",
+      "name": "H023",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1229",
+      "name": "H024",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1230",
+      "name": "H025",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1231",
+      "name": "H026",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1035",
+      "name": "H027",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1136",
+      "name": "H028",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "215",
+      "name": "H029",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1209",
+      "name": "H030",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "216",
+      "name": "H031",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "217",
+      "name": "H032",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "132",
+      "name": "H033",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1221",
+      "name": "H034",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1038",
+      "name": "H035",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1024",
+      "name": "H036",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "218",
+      "name": "H037",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1096",
+      "name": "H038",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "219",
+      "name": "H039",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1123",
+      "name": "H040",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1097",
+      "name": "H041",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1232",
+      "name": "H042",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1277",
+      "name": "H043",
+      "type": "HIKE TO",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1258",
+      "name": "H044",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1069",
+      "name": "H045",
+      "type": "STANDARD NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1170",
+      "name": "H046",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1259",
+      "name": "H047",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1282",
+      "name": "H048",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    },
+    {
+      "id": "1283",
+      "name": "H049",
+      "type": "TENT ONLY NONELECTRIC",
+      "loop": "H",
+      "accessible": false
+    }
+  ],
+  "total_count": 311,
+  "last_updated": "2025-10-25"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "recreation-gov-campsite-checker",
+  "version": "2.0.0",
+  "description": "Monitor recreation.gov campsite availability with a modern web interface",
+  "private": true,
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm start",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "echo 'Run npm run dev:backend and npm run dev:frontend in separate terminals'",
+    "build:frontend": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "camping",
+    "recreation.gov",
+    "monitoring",
+    "notifications"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/recreation-gov-campsite-checker"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  }
+}
+
